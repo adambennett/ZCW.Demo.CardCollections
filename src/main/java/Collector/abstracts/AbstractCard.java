@@ -1,19 +1,24 @@
 package Collector.abstracts;
 
+import Collector.models.*;
+
 import java.util.*;
 
 public abstract class AbstractCard {
 
     private final UUID id;
     protected final String name;
+    protected String text;
     protected Integer attack;
     protected Integer defend;
+    protected Player owner;
 
     public AbstractCard(String name, int atk, int def) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.attack = atk;
         this.defend = def;
+        this.text = "";
     }
 
     public UUID getId() {
@@ -36,12 +41,24 @@ public abstract class AbstractCard {
         return defend;
     }
 
+    public String getText() { return text; }
+
+    public Player getOwner() {
+        return owner;
+    }
+
     public void setAttack(Integer attack) {
         this.attack = attack;
     }
 
     public void setDefend(Integer defend) {
         this.defend = defend;
+    }
+
+    public void setText(String text) { this.text = text; }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
     // Hooks into game logic

@@ -1,5 +1,8 @@
 package Collector;
 
+import Collector.io.*;
+import Collector.logic.*;
+
 public class CardBattle {
 
 
@@ -9,6 +12,8 @@ public class CardBattle {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-
+        while (ScreenPrinter.gameLoop()) {
+            Game.createGame().setupGame().playGame().finishGame();
+        }
     }
 }

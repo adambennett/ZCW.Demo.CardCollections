@@ -20,10 +20,16 @@ public class DeckContents {
         }
         if (shuffle) {
             while (cards.size() > 0) {
-                this.orderedCards.add(cards.remove(ThreadLocalRandom.current().nextInt(cards.size() - 1)));
+                if (cards.size() > 1) {
+                    this.orderedCards.add(cards.remove(ThreadLocalRandom.current().nextInt(cards.size() - 1)));
+                } else {
+                    this.orderedCards.add(cards.remove(0));
+                }
             }
         }
     }
+
+    public List<AbstractCard> getList() { return this.orderedCards; }
 
     public Integer size() {
         return deckSize;

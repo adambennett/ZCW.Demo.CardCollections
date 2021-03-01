@@ -2,14 +2,15 @@ package Collector.models;
 
 import Collector.abstracts.*;
 import Collector.enums.*;
+import Collector.logic.*;
 
 import java.util.*;
 
 public class ComputerEnemy extends Player {
 
-    private Boolean isEnraged;
-    private Boolean isCautious;
-    private Boolean isLowHP;
+    private Boolean isEnraged = false;
+    private Boolean isCautious = false;
+    private Boolean isLowHP = false;
 
     public ComputerEnemy(String name, String deckName, int maxHP, Collection<AbstractCard> cards) {
         super(name, deckName, maxHP, cards);
@@ -41,7 +42,68 @@ public class ComputerEnemy extends Player {
         // Is my defend >= their attack?
             // If so  => Nothing happens (0)
             // If not => I take damage = (-(EnemyATK - MyDEF))
+
+    public CombatMove newCalc(Player enemy) {
+
+        // Both attack
+        Player pCopy = enemy.copy();
+        ComputerEnemy compCopy = this.copy();
+        Game.calculateCombat(CombatMove.ATTACK, CombatMove.ATTACK, pCopy, compCopy);
+        var compDamage = compCopy.getCurrentHP();
+        var humanDamage = pCopy.getCurrentHP();
+
+        var bothAttackScore = enemy.getCurrentHP() - humanDamage - (this.getCurrentHP() - compDamage);
+
+        // Both defend
+        pCopy = enemy.copy();
+        compCopy = this.copy();
+        Game.calculateCombat(CombatMove.DEFEND, CombatMove.DEFEND, pCopy, compCopy);
+        compDamage = compCopy.getCurrentHP();
+        humanDamage = pCopy.getCurrentHP();
+
+        var bothDefendScore = enemy.getCurrentHP() - humanDamage - (this.getCurrentHP() - compDamage);
+
+        // My attack
+        pCopy = enemy.copy();
+        compCopy = this.copy();
+        Game.calculateCombat(CombatMove.DEFEND, CombatMove.ATTACK, pCopy, compCopy);
+        compDamage = compCopy.getCurrentHP();
+        humanDamage = pCopy.getCurrentHP();
+
+        var myAttackScore = enemy.getCurrentHP() - humanDamage - (this.getCurrentHP() - compDamage);
+
+        // Their attack
+        pCopy = enemy.copy();
+        compCopy = this.copy();
+        Game.calculateCombat(CombatMove.ATTACK, CombatMove.DEFEND, pCopy, compCopy);
+        compDamage = compCopy.getCurrentHP();
+        humanDamage = pCopy.getCurrentHP();
+
+        var myDefendScore = enemy.getCurrentHP() - humanDamage - (this.getCurrentHP() - compDamage);
+
+        // Calculate
+        if (bothAttackScore > bothDefendScore && bothAttackScore > myDefendScore) {
+            return CombatMove.ATTACK;
+        } else if (getCurrentCard().getAttack() >= enemy.getCurrentCard().getAttack() && myAttackScore > bothDefendScore && myAttackScore > myDefendScore) {
+            return CombatMove.ATTACK;
+        } else {
+            return CombatMove.DEFEND;
+        }
+    }
+
+    @Override
+    public ComputerEnemy copy() {
+        var out = new ComputerEnemy(this.getName(), this.getDeck().getName(), this.getMaxHP(), this.getDeck().getList());
+        out.setCurrentHP(this.getCurrentHP());
+        out.setCurrentCard(this.getCurrentCard());
+        out.setCautious(this.isCautious);
+        out.setEnraged(this.isEnraged);
+        return out;
+    }
+
     public CombatMove calculateMove(Player enemy) {
+
+        /*isLowHP = getCurrentHP() <= getMaxHP() * 0.1;
 
         AbstractCard playerCard = enemy.getCurrentCard();
 
@@ -64,6 +126,35 @@ public class ComputerEnemy extends Player {
             myHeal--;
         }
 
+        if (myAtk == 0) {
+            return CombatMove.DEFEND;
+        } else if (myDefend == 0) {
+            return CombatMove.ATTACK;
+        }
+
+        int takeDefendEnemyAttack = 0;
+        int takeAttackEnemyAttack = 0;
+        int dealAttackEnemyAttack = 0;
+        int dealAttackEnemyDefend = 0;
+
+        takeDefendEnemyAttack = (enemyAtk > myDefend) ? enemyAtk - myDefend : 0;
+        takeAttackEnemyAttack = (myAtk > enemyAtk) ? 0 : enemyAtk;
+        dealAttackEnemyAttack = (myAtk > enemyAtk) ? myAtk : 0;
+        dealAttackEnemyDefend = (myAtk > enemyDefend) ? myAtk - enemyDefend : 0;
+
+        if (healMod > atkMod) {
+            if (takeDefendEnemyAttack > takeAttackEnemyAttack) {
+                return CombatMove.ATTACK;
+            } else {
+                return CombatMove.DEFEND;
+            }
+        } else {
+
+        }
+
+
+
+
         double bothAttackScore = myAtk == enemyAtk ? 0 : myAtk > enemyAtk ? (myAtk * atkMod) : (-enemyAtk);
         double bothDefendScore = myHeal == 0 && enemyHeal > 0 ? -enemyHeal : myHeal == enemyHeal ? 0 : myHeal > enemyHeal ? (myHeal * healMod) : (-enemyHeal);
         double myAttackScore = myAtk > enemyDefend ? ((myAtk - enemyDefend) * atkMod) : 0;
@@ -74,6 +165,15 @@ public class ComputerEnemy extends Player {
         if (attackScore > defendScore) {
             return CombatMove.ATTACK;
         }
-        return CombatMove.DEFEND;
+        return CombatMove.DEFEND;*/
+        return newCalc(enemy);
+    }
+
+    public void setEnraged(Boolean enraged) {
+        isEnraged = enraged;
+    }
+
+    public void setCautious(Boolean cautious) {
+        isCautious = cautious;
     }
 }

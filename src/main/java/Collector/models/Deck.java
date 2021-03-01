@@ -26,6 +26,8 @@ public class Deck {
         }
     }
 
+    public List<AbstractCard> getList() { return this.contents.getList(); }
+
     public List<AbstractCard> draw(int amount) {
         return this.contents.draw(amount);
     }
