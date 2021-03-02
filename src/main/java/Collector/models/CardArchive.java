@@ -8,11 +8,19 @@ import java.util.concurrent.*;
 
 public class CardArchive {
 
-    public static List<AbstractCard> archive;
-    public static Map<String, AbstractCard> archived;
+    private static final List<AbstractCard> archive;
+    private static final Map<String, AbstractCard> archived;
 
     public static AbstractCard randomCard() {
-        return archive == null ? null : archive.get(ThreadLocalRandom.current().nextInt(archive.size() - 1));
+        return archive == null ? null : archive.get(ThreadLocalRandom.current().nextInt(archive.size() - 1)).copy();
+    }
+
+    public static AbstractCard get(String card) {
+        return archived.containsKey(card) ? archived.get(card).copy() : null;
+    }
+
+    public static AbstractCard get(AbstractCard card) {
+        return null;
     }
 
     static {
@@ -112,19 +120,8 @@ public class CardArchive {
         GenericCard ull = new GenericCard("Ull", 6, 4);
         archive.add(ull);
 
-        GenericCard tokan = new GenericCard("Tokan", 0, 4);
-        tokan.setText("When drawn, gain 5 maximum HP.");
-        tokan.setOnDraw(() -> tokan.getOwner().increaseMaxHP(5));
-        archive.add(tokan);
-
-        GenericCard healbot = new GenericCard("Healbot", 0, 0);
-        healbot.setText("When drawn, heal 10 HP.");
-        healbot.setOnDraw(() -> {
-            if (healbot.getOwner() != null) {
-                healbot.getOwner().setCurrentHP(healbot.getOwner().getCurrentHP() + 10);
-            }
-        });
-        archive.add(healbot);
+        archive.add(new Tokan());
+        archive.add(new Healbot());
 
         for (AbstractCard c : archive) {
             archived.put(c.getName(), c);

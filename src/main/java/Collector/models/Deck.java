@@ -32,6 +32,10 @@ public class Deck {
         return this.contents.draw(amount);
     }
 
+    public void shuffle(List<AbstractCard> shuffleInto) {
+        this.contents.shuffle(shuffleInto);
+    }
+
     public AbstractCard fetch(AbstractCard target) {
         return this.contents.fetch(target);
     }

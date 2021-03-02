@@ -12,6 +12,7 @@ public class Player {
     private Integer defendBonus;
     private final String name;
     private final Deck deck;
+    private final List<AbstractCard> discard;
     private AbstractCard currentCard;
 
     public Player(String name, String deckName, int maxHP, Collection<AbstractCard> cards) {
@@ -20,16 +21,29 @@ public class Player {
         this.currentHP = maxHP;
         this.attackBonus = 0;
         this.defendBonus = 0;
+        this.discard = new ArrayList<>();
+        var actual = new ArrayList<AbstractCard>();
         for (AbstractCard c : cards) {
-            c.setOwner(this);
+            var copy = c.copy();
+            copy.setOwner(this);
+            actual.add(copy);
         }
-        this.deck = new Deck(deckName, cards, -1);
+        this.deck = new Deck(deckName, actual, -1);
     }
 
     public List<AbstractCard> draw(int amt) {
         this.attackBonus = 0;
         this.defendBonus = 0;
-        return this.deck.draw(amt);
+        if (this.deck.size() < 2) {
+            this.deck.shuffle(this.discard);
+            this.discard.clear();
+        }
+        var cards = this.deck.draw(amt);
+        for (var card : cards) {
+            card.onDrawn();
+            this.discard.add(card);
+        }
+        return cards;
     }
 
     public Player copy(){
@@ -37,6 +51,22 @@ public class Player {
         out.setCurrentHP(this.currentHP);
         out.setCurrentCard(this.currentCard);
         return out;
+    }
+
+    public String displayAttack() {
+        return "" + (this.getCurrentCard().getAttack() + this.getAttackBonus());
+    }
+
+    public String displayDefense() {
+        return "" + (this.getCurrentCard().getDefend() + this.getDefendBonus());
+    }
+
+    public String displayName() {
+        return this.getName() + " - " + this.getCurrentHP() + "/" + this.getMaxHP();
+    }
+
+    public String displayCard() {
+        return this.getCurrentCard().getName();
     }
 
     public String getName() {

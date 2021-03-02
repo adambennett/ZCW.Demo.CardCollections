@@ -94,6 +94,25 @@ public class DeckContents {
         return ThreadLocalRandom.current().nextInt(this.orderedCards.size() - 1);
     }
 
+    public void shuffle(List<AbstractCard> shuffleInto) {
+        var out = new ArrayList<AbstractCard>();
+        var shuffle = new ArrayList<>(this.orderedCards);
+        this.deckSize = 0;
+        shuffle.addAll(shuffleInto);
+        while (shuffle.size() > 0) {
+            if (shuffle.size() == 1) {
+                out.add(shuffle.remove(0));
+                deckSize++;
+                continue;
+            }
+            out.add(shuffle.remove(ThreadLocalRandom.current().nextInt(shuffle.size() - 1)));
+            deckSize++;
+        }
+        this.orderedCards.clear();
+        this.cardAmounts.clear();
+        this.orderedCards.addAll(out);
+    }
+
     public AbstractCard remove(AbstractCard toRemove) {
         if (this.deckSize == 0 || this.orderedCards.size() < 1) return null;
 

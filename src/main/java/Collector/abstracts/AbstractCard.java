@@ -1,5 +1,6 @@
 package Collector.abstracts;
 
+import Collector.cards.*;
 import Collector.models.*;
 
 import java.util.*;
@@ -11,6 +12,7 @@ public abstract class AbstractCard {
     protected String text;
     protected Integer attack;
     protected Integer defend;
+    protected Integer magic;
     protected Player owner;
 
     public AbstractCard(String name, int atk, int def) {
@@ -18,6 +20,7 @@ public abstract class AbstractCard {
         this.name = name;
         this.attack = atk;
         this.defend = def;
+        this.magic = 0;
         this.text = "";
     }
 
@@ -48,6 +51,10 @@ public abstract class AbstractCard {
 
     public Player getOwner() {
         return owner;
+    }
+
+    public Integer getMagic() {
+        return magic;
     }
 
     public void setAttack(Integer attack) {
@@ -86,4 +93,6 @@ public abstract class AbstractCard {
     public int hashCode() {
         return Objects.hash(getId(), getName());
     }
+
+    public abstract AbstractCard copy();
 }

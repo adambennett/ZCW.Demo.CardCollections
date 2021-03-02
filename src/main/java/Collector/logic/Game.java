@@ -1,6 +1,7 @@
 package Collector.logic;
 
 import Collector.abstracts.*;
+import Collector.cards.*;
 import Collector.enums.*;
 import Collector.io.*;
 import Collector.models.*;
@@ -49,22 +50,20 @@ public class Game {
         Collection<AbstractCard> playerCards = new ArrayList<>();
         Collection<AbstractCard> computerCards = new ArrayList<>();
         for (var i = 0; i < this.cards; i++) {
-            playerCards.add(CardArchive.randomCard());
+            playerCards.add(new Tokan());//CardArchive.randomCard());
         }
         for (var i = 0; i < this.cards; i++) {
             computerCards.add(CardArchive.randomCard());
         }
-        Player human = new Player(playerName, playerName + "'s Deck", startingHP, playerCards);
-        ComputerEnemy computer = new ComputerEnemy(computerName, computerName + "'s Deck", startingHP, computerCards);
-        this.human = human;
-        this.computer = computer;
+        this.human = new Player(playerName, playerName + "'s Deck", startingHP, playerCards);
+        this.computer = new ComputerEnemy(computerName, computerName + "'s Deck", startingHP, computerCards);
         return this;
     }
 
     public Game playGame() {
         while (!isFinished()) {
-            this.human.setCurrentCard(this.human.getDeck().draw(1).get(0));
-            this.computer.setCurrentCard(this.computer.getDeck().draw(1).get(0));
+            this.human.setCurrentCard(this.human.draw(1).get(0));
+            this.computer.setCurrentCard(this.computer.draw(1).get(0));
             var enemyMove = this.computer.calculateMove(this.human);
             ScreenPrinter.drawSummary(this.human, this.computer);
             var playerMove = ScreenPrinter.promptUserAfterDraw();
