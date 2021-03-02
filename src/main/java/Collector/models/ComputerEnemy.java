@@ -21,7 +21,7 @@ public class ComputerEnemy extends Player {
         // Calculate
         if (bothAttackScore > bothDefendScore && bothAttackScore > myDefendScore) {
             return CombatMove.ATTACK;
-        } else if (getCurrentCard().getAttack() >= enemy.getCurrentCard().getAttack() && myAttackScore > bothDefendScore && myAttackScore > myDefendScore) {
+        } else if (getFullDamage() >= enemy.getFullDamage() && myAttackScore > bothDefendScore && myAttackScore > myDefendScore) {
             return CombatMove.ATTACK;
         } else {
             return CombatMove.DEFEND;
@@ -35,7 +35,7 @@ public class ComputerEnemy extends Player {
         ComputerEnemy computerCopy  = this.copy();
 
         // Run the combat step for the desired simulated moves
-        Game.calculateCombat(simulatedPlayerMove, simulatedEnemyMove, playerCopy, computerCopy);
+        Game.calculateCombat(simulatedPlayerMove, simulatedEnemyMove, playerCopy, computerCopy, true);
 
         // Check actual HP values
         var playerHP     = player.getCurrentHP();

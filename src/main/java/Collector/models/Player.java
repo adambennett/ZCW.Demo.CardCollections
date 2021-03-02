@@ -10,6 +10,8 @@ public class Player {
     private Integer currentHP;
     private Integer attackBonus;
     private Integer defendBonus;
+    private Integer permAttackBonus;
+    private Integer permDefendBonus;
     private final String name;
     private final Deck deck;
     private final List<AbstractCard> discard;
@@ -21,6 +23,8 @@ public class Player {
         this.currentHP = maxHP;
         this.attackBonus = 0;
         this.defendBonus = 0;
+        this.permAttackBonus = 0;
+        this.permDefendBonus = 0;
         this.discard = new ArrayList<>();
         var actual = new ArrayList<AbstractCard>();
         for (AbstractCard c : cards) {
@@ -53,16 +57,24 @@ public class Player {
         return out;
     }
 
+    public Integer getFullDamage() {
+        return this.getCurrentCard().getAttack() + this.getAttackBonus() + this.getPermAttackBonus();
+    }
+
+    public Integer getFullDefense() {
+        return this.getCurrentCard().getDefend() + this.getDefendBonus() + this.getPermDefendBonus();
+    }
+
     public String displayAttack() {
-        return "" + (this.getCurrentCard().getAttack() + this.getAttackBonus());
+        var base = this.getCurrentCard().getAttack();
+        var total = base + this.getAttackBonus() + this.getPermAttackBonus();
+        return total != base ? "" + total + " (" + base + ")" : "" + base;
     }
 
     public String displayDefense() {
-        return "" + (this.getCurrentCard().getDefend() + this.getDefendBonus());
-    }
-
-    public String displayName() {
-        return this.getName() + " - " + this.getCurrentHP() + "/" + this.getMaxHP();
+        var base = this.getCurrentCard().getDefend();
+        var total = base + this.getDefendBonus() + this.getPermDefendBonus();
+        return total != base ? "" + total + " (" + base + ")" : "" + base;
     }
 
     public String displayCard() {
@@ -97,12 +109,32 @@ public class Player {
         return defendBonus;
     }
 
+    public Integer getPermAttackBonus() {
+        return permAttackBonus;
+    }
+
+    public Integer getPermDefendBonus() {
+        return permDefendBonus;
+    }
+
+    public List<AbstractCard> getDiscard() {
+        return discard;
+    }
+
     public void setAttackBonus(Integer attackBonus) {
         this.attackBonus = attackBonus;
     }
 
     public void setDefendBonus(Integer defendBonus) {
         this.defendBonus = defendBonus;
+    }
+
+    public void setPermAttackBonus(Integer permAttackBonus) {
+        this.permAttackBonus = permAttackBonus;
+    }
+
+    public void setPermDefendBonus(Integer permDefendBonus) {
+        this.permDefendBonus = permDefendBonus;
     }
 
     public void damage(int dmg) {
@@ -115,6 +147,22 @@ public class Player {
 
     public void increaseMaxHP(int amt) {
         this.maxHP += amt;
+    }
+
+    public void increasePermAttackBonus(int amt) {
+        this.permAttackBonus += amt;
+    }
+
+    public void increasePermDefenseBonus(int amt) {
+        this.permDefendBonus += amt;
+    }
+
+    public void decreasePermAttackBonus(int amt) {
+        this.permAttackBonus -= amt;
+    }
+
+    public void decreasePermDefenseBonus(int amt) {
+        this.permDefendBonus -= amt;
     }
 
     public void decreaseMaxHP(int amt) {

@@ -122,6 +122,9 @@ public class CardArchive {
 
         archive.add(new Tokan());
         archive.add(new Healbot());
+        archive.add(new Koyjhet());
+        archive.add(new Spimoky());
+        archive.add(new Bufftoss());
 
         for (AbstractCard c : archive) {
             archived.put(c.getName(), c);

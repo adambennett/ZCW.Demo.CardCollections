@@ -73,6 +73,7 @@ public abstract class AbstractCard {
 
     // Hooks into game logic
     public void onDrawn() {}
+    public void afterDrawn() {}
     public void onPlay(AbstractCard enemyCard) {}
     public void onAttack(AbstractCard enemyCard) {}
     public void onDefend(AbstractCard enemyCard) {}
