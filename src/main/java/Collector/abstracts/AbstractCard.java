@@ -14,6 +14,7 @@ public abstract class AbstractCard {
     protected Integer defend;
     protected Integer magic;
     protected Player owner;
+    protected Boolean isExhaust;
 
     public AbstractCard(String name, int atk, int def) {
         this.id = UUID.randomUUID();
@@ -22,6 +23,7 @@ public abstract class AbstractCard {
         this.defend = def;
         this.magic = 0;
         this.text = "";
+        this.isExhaust = false;
     }
 
     public UUID getId() {
@@ -46,7 +48,9 @@ public abstract class AbstractCard {
 
     public String getText() {
         if (text == null) return "";
-        return text;
+        return text.replaceAll("!M!", "" + this.getMagic())
+                .replaceAll("!A!", "" + this.getAttack())
+                .replaceAll("!D!", "" + this.getDefend());
     }
 
     public Player getOwner() {
@@ -55,6 +59,10 @@ public abstract class AbstractCard {
 
     public Integer getMagic() {
         return magic;
+    }
+
+    public Boolean isExhaust() {
+        return isExhaust;
     }
 
     public void setAttack(Integer attack) {
@@ -71,6 +79,14 @@ public abstract class AbstractCard {
         this.owner = owner;
     }
 
+    public void setMagic(Integer magic) {
+        this.magic = magic;
+    }
+
+    public void setExhaust(Boolean exhaust) {
+        isExhaust = exhaust;
+    }
+
     // Hooks into game logic
     public void onDrawn() {}
     public void afterDrawn() {}
@@ -85,9 +101,9 @@ public abstract class AbstractCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractCard)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         AbstractCard that = (AbstractCard) o;
-        return getId().equals(that.getId()) && getName().equals(that.getName());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName());
     }
 
     @Override

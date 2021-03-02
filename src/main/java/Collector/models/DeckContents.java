@@ -53,18 +53,21 @@ public class DeckContents {
     }
 
     public void add(List<AbstractCard> cards, boolean shuffle, boolean shuffleAll) {
+        this.deckSize += cards.size();
         if (shuffle) {
             while (cards.size() > 0) {
+                if (cards.size() == 1) {
+                    this.orderedCards.add(cards.remove(0));
+                    continue;
+                }
                 this.orderedCards.add(cards.remove(ThreadLocalRandom.current().nextInt(cards.size() - 1)));
             }
         } else {
             this.orderedCards.addAll(cards);
         }
 
-        this.deckSize += cards.size();
         for (AbstractCard card : cards) {
             this.cardAmounts.merge(card, 1, (k, v) -> v + 1);
-            this.deckSize++;
         }
 
         if (shuffleAll) {

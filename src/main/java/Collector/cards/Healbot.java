@@ -4,7 +4,7 @@ import Collector.abstracts.*;
 
 public class Healbot extends AbstractCard {
 
-    private static final String cardText = "When drawn, heal 10 HP.";
+    private static final String cardText = "When drawn, heal !M! HP.";
     private static final Integer baseMagic = 10;
 
     public Healbot() {

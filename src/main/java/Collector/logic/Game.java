@@ -70,43 +70,59 @@ public class Game {
     public static String calculateCombat(CombatMove playerMove, CombatMove enemyMove, Player human, ComputerEnemy computer, boolean simulated) {
         var playerCard = human.getCurrentCard();
         var enemyCard = computer.getCurrentCard();
+        String results;
 
         if (playerMove == CombatMove.ATTACK && enemyMove == CombatMove.ATTACK) {
             if (playerCard.getAttack() > enemyCard.getAttack()) {
                 computer.damage(human.getFullDamage());
-                return "Vicious combat! Enemy took " + human.getFullDamage() + " damage.";
+                results = "Vicious combat! Enemy took " + human.getFullDamage() + " damage.";
             } else if (playerCard.getAttack() < enemyCard.getAttack()) {
                 human.damage(computer.getFullDamage());
-                return "Vicious combat! You took " + computer.getFullDamage() + " damage.";
+                results = "Vicious combat! You took " + computer.getFullDamage() + " damage.";
             } else {
-                return "Both players attacked, but nothing happened.";
+                results = "Both players attacked, but nothing happened.";
+            }
+            if (!simulated) {
+                enemyCard.onAttack(playerCard);
+                playerCard.onAttack(enemyCard);
             }
         } else if (playerMove == CombatMove.DEFEND && enemyMove == CombatMove.DEFEND) {
             human.heal(playerCard.getDefend());
             computer.heal(enemyCard.getDefend());
             if (!simulated) {
+                playerCard.onDefend(enemyCard);
                 playerCard.onStalemate(enemyCard);
+                enemyCard.onDefend(playerCard);
                 enemyCard.onStalemate(playerCard);
             }
-            return "Stalemate - both players healed.";
+            results = "Stalemate - both players healed.";
         } else if (playerMove == CombatMove.ATTACK) {
             if (human.getFullDamage() > computer.getFullDefense()) {
                 var dmg = human.getFullDamage() - computer.getFullDefense();
                 computer.damage(dmg);
-                return "Enemy took " + dmg + " damage.";
+                results = "Enemy took " + dmg + " damage.";
             } else {
-                return "The enemy defended your attack!";
+                results = "The enemy defended your attack!";
+            }
+            if (!simulated) {
+                playerCard.onAttack(enemyCard);
+                enemyCard.onDefend(playerCard);
             }
         } else if (playerMove == CombatMove.DEFEND) {
             if (computer.getFullDamage() > human.getFullDefense()) {
                 var dmg = computer.getFullDamage() - human.getFullDefense();
                 human.damage(dmg);
-                return  "You took " + dmg + " damage.";
+                results =  "You took " + dmg + " damage.";
             } else {
-                return "You defended the enemy attack!";
+                results = "You defended the enemy attack!";
+            }
+            if (!simulated) {
+                playerCard.onDefend(enemyCard);
+                enemyCard.onAttack(playerCard);
             }
         } else {
-            return "Something unknown occurred?";
+            results = "Something unknown occurred?";
         }
+        return results;
     }
 }

@@ -4,7 +4,7 @@ import Collector.abstracts.*;
 
 public class Tokan extends AbstractCard {
 
-    private static final String cardText = "When drawn, gain 5 maximum HP.";
+    private static final String cardText = "When drawn, gain !M! maximum HP.";
     private static final Integer baseMagic = 5;
 
     public Tokan() {

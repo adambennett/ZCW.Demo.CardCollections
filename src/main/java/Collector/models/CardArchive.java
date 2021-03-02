@@ -125,6 +125,9 @@ public class CardArchive {
         archive.add(new Koyjhet());
         archive.add(new Spimoky());
         archive.add(new Bufftoss());
+        archive.add(new Packhouse());
+        archive.add(new Halfrot());
+        archive.add(new Palasor());
 
         for (AbstractCard c : archive) {
             archived.put(c.getName(), c);

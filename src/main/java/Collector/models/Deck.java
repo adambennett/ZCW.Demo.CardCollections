@@ -4,7 +4,7 @@ import Collector.abstracts.*;
 
 import java.util.*;
 
-public class Deck {
+public class Deck implements Iterable<AbstractCard> {
 
     private final DeckContents contents;
     private final String name;
@@ -75,5 +75,8 @@ public class Deck {
     }
 
 
-
+    @Override
+    public Iterator<AbstractCard> iterator() {
+        return this.contents.getList().iterator();
+    }
 }

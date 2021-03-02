@@ -15,6 +15,7 @@ public class Player {
     private final String name;
     private final Deck deck;
     private final List<AbstractCard> discard;
+    private final List<AbstractCard> exhaust;
     private AbstractCard currentCard;
 
     public Player(String name, String deckName, int maxHP, Collection<AbstractCard> cards) {
@@ -26,6 +27,7 @@ public class Player {
         this.permAttackBonus = 0;
         this.permDefendBonus = 0;
         this.discard = new ArrayList<>();
+        this.exhaust = new ArrayList<>();
         var actual = new ArrayList<AbstractCard>();
         for (AbstractCard c : cards) {
             var copy = c.copy();
@@ -45,7 +47,11 @@ public class Player {
         var cards = this.deck.draw(amt);
         for (var card : cards) {
             card.onDrawn();
-            this.discard.add(card);
+            if (card.isExhaust()) {
+                this.exhaust.add(card);
+            } else {
+                this.discard.add(card);
+            }
         }
         return cards;
     }
