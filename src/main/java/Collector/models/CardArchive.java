@@ -112,6 +112,11 @@ public class CardArchive {
         GenericCard ull = new GenericCard("Ull", 6, 4);
         archive.add(ull);
 
+        GenericCard tokan = new GenericCard("Tokan", 0, 4);
+        tokan.setText("When drawn, gain 5 maximum HP.");
+        tokan.setOnDraw(() -> tokan.getOwner().increaseMaxHP(5));
+        archive.add(tokan);
+
         GenericCard healbot = new GenericCard("Healbot", 0, 0);
         healbot.setText("When drawn, heal 10 HP.");
         healbot.setOnDraw(() -> {

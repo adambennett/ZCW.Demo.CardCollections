@@ -41,7 +41,10 @@ public abstract class AbstractCard {
         return defend;
     }
 
-    public String getText() { return text; }
+    public String getText() {
+        if (text == null) return "";
+        return text;
+    }
 
     public Player getOwner() {
         return owner;

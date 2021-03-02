@@ -4,7 +4,7 @@ import Collector.abstracts.*;
 import Collector.enums.*;
 import Collector.logic.*;
 import Collector.models.*;
-import jdk.jshell.execution.*;
+import io.bretty.console.table.*;
 
 import java.util.*;
 
@@ -41,8 +41,31 @@ public class ScreenPrinter {
     public static void drawSummary(Player human, ComputerEnemy opponent) {
         var player = human.getCurrentCard();
         var enemy = opponent.getCurrentCard();
-        System.out.println("\nPlayer drew: " + player.getName() + " -- " + player.getAttack() + " / " + player.getDefend());
-        System.out.println("Enemy drew: " + enemy.getName() + " -- " + enemy.getAttack() + " / " + enemy.getDefend() + "\n");
+
+        ColumnFormatter<String> playerFormatter = ColumnFormatter.text(Alignment.CENTER, 35);
+        ColumnFormatter<String> cardFormatter = ColumnFormatter.text(Alignment.CENTER, 35);
+        ColumnFormatter<String> atkFormatter = ColumnFormatter.text(Alignment.CENTER, 6);
+        ColumnFormatter<String> defFormatter = ColumnFormatter.text(Alignment.CENTER, 6);
+        ColumnFormatter<String> textFormatter = ColumnFormatter.text(Alignment.CENTER, 80);
+
+        String[] players = new String[]{"-----------------------------------", opponent.getName() + " - " + opponent.getCurrentHP() + "/" + opponent.getMaxHP(), human.getName() + " - " + human.getCurrentHP() + "/" + human.getMaxHP(), "-----------------------------------"};
+        String[] cards = new String[]{"-----------------------------------", enemy.getName(), player.getName(), "-----------------------------------"};
+        String[] atks = new String[]{"------", "" + (enemy.getAttack() + opponent.getAttackBonus()), "" + (player.getAttack() + human.getAttackBonus()), "------"};
+        String[] defs = new String[]{"------", "" + (enemy.getDefend() + opponent.getDefendBonus()), "" + (player.getDefend() + human.getDefendBonus()), "------"};
+        String[] texts = new String[]{"--------------------------------------------------------------------------------", enemy.getText(), player.getText(), "--------------------------------------------------------------------------------"};
+
+        Table.Builder builder = new Table.Builder("Player", players, playerFormatter);
+
+        builder.addColumn("Card Drawn", cards, cardFormatter);
+        builder.addColumn("ATK", atks, atkFormatter);
+        builder.addColumn("DEF", defs, defFormatter);
+        builder.addColumn("Card Text", texts, textFormatter);
+
+        Table table = builder.build();
+        System.out.println(table);
+
+        //System.out.println("\nPlayer drew: " + player.getName() + " -- " + player.getAttack() + " / " + player.getDefend());
+        //System.out.println("Enemy drew: " + enemy.getName() + " -- " + enemy.getAttack() + " / " + enemy.getDefend() + "\n");
     }
 
     public static CombatMove promptUserAfterDraw() {
@@ -51,7 +74,7 @@ public class ScreenPrinter {
     }
 
     public static void combatSummary(String results, Game game) {
-        System.out.println("\nCombat Summary:\n" + results + "\nPlayer HP: " + game.getHuman().getCurrentHP() + "\nEnemy HP:" + game.getComputer().getCurrentHP());
+        System.out.println("\nCombat Summary:\n" + results);
     }
 
     public static String getStringInput(String prompt) {

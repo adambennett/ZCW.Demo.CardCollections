@@ -8,6 +8,8 @@ public class Player {
 
     private Integer maxHP;
     private Integer currentHP;
+    private Integer attackBonus;
+    private Integer defendBonus;
     private final String name;
     private final Deck deck;
     private AbstractCard currentCard;
@@ -16,10 +18,18 @@ public class Player {
         this.name = name;
         this.maxHP = maxHP;
         this.currentHP = maxHP;
+        this.attackBonus = 0;
+        this.defendBonus = 0;
         for (AbstractCard c : cards) {
             c.setOwner(this);
         }
         this.deck = new Deck(deckName, cards, -1);
+    }
+
+    public List<AbstractCard> draw(int amt) {
+        this.attackBonus = 0;
+        this.defendBonus = 0;
+        return this.deck.draw(amt);
     }
 
     public Player copy(){
@@ -49,8 +59,20 @@ public class Player {
         return currentCard;
     }
 
-    public void setMaxHP(Integer maxHP) {
-        this.maxHP = maxHP;
+    public Integer getAttackBonus() {
+        return attackBonus;
+    }
+
+    public Integer getDefendBonus() {
+        return defendBonus;
+    }
+
+    public void setAttackBonus(Integer attackBonus) {
+        this.attackBonus = attackBonus;
+    }
+
+    public void setDefendBonus(Integer defendBonus) {
+        this.defendBonus = defendBonus;
     }
 
     public void damage(int dmg) {
@@ -59,6 +81,18 @@ public class Player {
 
     public void heal(int heal) {
         this.setCurrentHP(this.currentHP + heal);
+    }
+
+    public void increaseMaxHP(int amt) {
+        this.maxHP += amt;
+    }
+
+    public void decreaseMaxHP(int amt) {
+        this.maxHP -= amt;
+        if (this.maxHP < 1) {
+            this.maxHP = 1;
+        }
+        this.setCurrentHP(this.currentHP);
     }
 
     public void setCurrentHP(Integer currentHP) {

@@ -6,14 +6,13 @@ import Collector.io.*;
 import Collector.models.*;
 
 import java.util.*;
-import java.util.concurrent.*;
 
 public class Game {
 
-    private Integer startingHP;
-    private Integer cards;
-    private String playerName;
-    private String computerName;
+    private final Integer startingHP;
+    private final Integer cards;
+    private final String playerName;
+    private final String computerName;
     private Player human;
     private ComputerEnemy computer;
 
@@ -38,11 +37,6 @@ public class Game {
         this.startingHP = startHP;
         this.cards = cards;
         this.computerName = "Kris Younger";
-    }
-
-    public Game(Player player, ComputerEnemy enemy) {
-        this.human = player;
-        this.computer = enemy;
     }
 
     public static Game createGame() {
@@ -77,14 +71,15 @@ public class Game {
             var results = Game.calculateCombat(playerMove, enemyMove, this.human, this.computer);
             ScreenPrinter.combatSummary(results, this);
         }
-        ScreenPrinter.gameOver(this.human.getCurrentHP() > this.computer.getCurrentHP());
         return this;
     }
 
-    public void finishGame() {}
-
     private Boolean isFinished() {
-       return this.human.getCurrentHP() < 1 || this.computer.getCurrentHP() < 1;
+        return this.human.getCurrentHP() < 1 || this.computer.getCurrentHP() < 1;
+    }
+
+    public void finishGame() {
+        ScreenPrinter.gameOver(this.human.getCurrentHP() > this.computer.getCurrentHP());
     }
 
     public static String calculateCombat(CombatMove playerMove, CombatMove enemyMove, Player human, ComputerEnemy computer) {
@@ -124,22 +119,6 @@ public class Game {
         } else {
             return "Something unknown occurred?";
         }
-    }
-
-    public Integer getStartingHP() {
-        return startingHP;
-    }
-
-    public Integer getCards() {
-        return cards;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public String getComputerName() {
-        return computerName;
     }
 
     public Player getHuman() {
