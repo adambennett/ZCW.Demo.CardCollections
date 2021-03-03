@@ -10,9 +10,7 @@ public class GenericCard extends AbstractCard {
     private UnaryCardHook onAtk;
     private UnaryCardHook onDef;
     private UnaryCardHook onStale;
-    private UnaryCardHook onComb;
     private UnaryCardHook onVicious;
-    private EnemyHealHook onEnemyHeal;
 
     public GenericCard(String name, int atk, int def) {
         super(name, atk, def);
@@ -25,9 +23,7 @@ public class GenericCard extends AbstractCard {
         out.setOnAtk(this.onAtk);
         out.setOnDef(this.onDef);
         out.setOnStalemate(this.onStale);
-        out.setOnCombat(this.onComb);
         out.setOnViciousCombat(this.onVicious);
-        out.setOnEnemyHeal(this.onEnemyHeal);
         return out;
     }
 
@@ -67,23 +63,9 @@ public class GenericCard extends AbstractCard {
     }
 
     @Override
-    public void onCombat(AbstractCard enemyCard) {
-        if (this.onComb != null) {
-            this.onComb.hook(enemyCard);
-        }
-    }
-
-    @Override
     public void onViciousCombat(AbstractCard enemyCard) {
         if (this.onVicious != null) {
             this.onVicious.hook(enemyCard);
-        }
-    }
-
-    @Override
-    public void onEnemyHeal(AbstractCard enemyCard, int healedFor, int hpAfterHealing) {
-        if (this.onEnemyHeal != null) {
-            this.onEnemyHeal.enemyHeal(enemyCard, healedFor, hpAfterHealing);
         }
     }
 
@@ -107,15 +89,7 @@ public class GenericCard extends AbstractCard {
         this.onStale = onStale;
     }
 
-    public void setOnCombat(UnaryCardHook onComb) {
-        this.onComb = onComb;
-    }
-
     public void setOnViciousCombat(UnaryCardHook onVicious) {
         this.onVicious = onVicious;
-    }
-
-    public void setOnEnemyHeal(EnemyHealHook onEnemyHeal) {
-        this.onEnemyHeal = onEnemyHeal;
     }
 }
