@@ -135,6 +135,7 @@ public class CardArchive {
         archive.add(new Keflew());
         archive.add(new Seplew());
         archive.add(new Jeqlew());
+        archive.add(new Sprokked());
 
         for (AbstractCard c : archive) {
             archived.put(c.getName(), c);
