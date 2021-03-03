@@ -4,6 +4,7 @@ import Collector.abstracts.*;
 import Collector.enums.*;
 import Collector.logic.*;
 import Collector.models.*;
+import Collector.utilities.*;
 import io.bretty.console.table.*;
 
 import java.util.*;
@@ -25,7 +26,7 @@ public class ScreenPrinter {
     public static Game gameSetup() {
         var input = getStringInput("Welcome to the card battle! What is your name?\n");
         if (input == null || input.equalsIgnoreCase("")) {
-            input = "Adam Bennett";
+            input = Constants.DefaultPlayerName;
         }
         var hpOption = getStringInput("How much HP should each player start with?\n");
         try {
@@ -33,7 +34,7 @@ public class ScreenPrinter {
             var cards = Integer.parseInt(getStringInput("How many cards per deck?\n"));
             return new Game(input, hp, cards);
         } catch (Exception ex) {
-            return new Game(input, 50, 31);
+            return new Game(input, Constants.DefaultStartHP, Constants.DefaultStartCards);
         }
     }
 
@@ -42,16 +43,16 @@ public class ScreenPrinter {
     }
 
     private static int getTextWidth(AbstractCard player, AbstractCard enemy) {
-        return (player.getText().length() >= enemy.getText().length()) ? player.getText().length() + 14 : enemy.getText().length() + 14;
+        return (player.getText().length() >= enemy.getText().length()) ? player.getText().length() + 6 : enemy.getText().length() + 6;
     }
 
     private static int getCardWidth(AbstractCard player, AbstractCard enemy) {
-        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 10 : enemy.getName().length() + 10;
+        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 6 : enemy.getName().length() + 6;
         return Math.max(width, 30);
     }
 
     private static int getNameWidth(Player player, Player enemy) {
-        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 10 : enemy.getName().length() + 10;
+        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 6 : enemy.getName().length() + 6;
         return Math.max(width, 32);
     }
 
@@ -62,8 +63,8 @@ public class ScreenPrinter {
         var playerWidth = getNameWidth(human, opponent);
         var cardWidth   = getCardWidth(player, enemy);
         var leftWidth   = 8;
-        var atkWidth    = 8;
-        var defWidth    = 8;
+        var atkWidth    = 10;
+        var defWidth    = 10;
         var hpWidth     = 12;
         var textWidth = getTextWidth(player, enemy);
         ColumnFormatter<String> playerFormatter = ColumnFormatter.text(Alignment.CENTER, playerWidth);
@@ -114,7 +115,7 @@ public class ScreenPrinter {
     }
 
     public static void combatSummary(String results, Game game) {
-        System.out.println("\nCOMBAT SUMMARY:\n" + results + "\n\n");
+        System.out.println("\n\nCOMBAT SUMMARY:\n" + results + "\n\n");
     }
 
     public static String getStringInput(String prompt) {

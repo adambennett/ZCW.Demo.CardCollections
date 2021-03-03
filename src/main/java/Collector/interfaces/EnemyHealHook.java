@@ -6,4 +6,5 @@ import Collector.abstracts.*;
 public interface EnemyHealHook {
 
     void enemyHeal(AbstractCard enemyCard, int healedFor, int hpAfterHealing);
+
 }

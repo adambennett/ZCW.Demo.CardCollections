@@ -1,6 +1,5 @@
 package Collector.abstracts;
 
-import Collector.cards.*;
 import Collector.models.*;
 
 import java.util.*;
@@ -11,16 +10,16 @@ public abstract class AbstractCard {
     protected final String name;
     protected String text;
     protected Integer attack;
-    protected Integer defend;
+    protected Optional<Integer> defend;
     protected Integer magic;
     protected Player owner;
     protected Boolean isExhaust;
 
-    public AbstractCard(String name, int atk, int def) {
+    public AbstractCard(String name, int atk, Integer def) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.attack = atk;
-        this.defend = def;
+        this.defend = def != null ? Optional.of(def) : Optional.empty();
         this.magic = 0;
         this.text = "";
         this.isExhaust = false;
@@ -34,23 +33,23 @@ public abstract class AbstractCard {
         return name;
     }
 
-    public String getUniqueName() {
-        return id + ":" + name;
-    }
-
     public Integer getAttack() {
         return attack;
     }
 
     public Integer getDefend() {
+        return defend.orElse(0);
+    }
+
+    public Optional<Integer> getTrueDefend() {
         return defend;
     }
 
     public String getText() {
         if (text == null) return "";
         return text.replaceAll("!M!", "" + this.getMagic())
-                .replaceAll("!A!", "" + this.getAttack())
-                .replaceAll("!D!", "" + this.getDefend());
+                   .replaceAll("!A!", "" + this.getAttack())
+                   .replaceAll("!D!", "" + this.getDefend());
     }
 
     public Player getOwner() {
@@ -70,7 +69,7 @@ public abstract class AbstractCard {
     }
 
     public void setDefend(Integer defend) {
-        this.defend = defend;
+        this.defend = defend != null ? Optional.of(defend) : Optional.empty();
     }
 
     public void setText(String text) { this.text = text; }
@@ -83,20 +82,19 @@ public abstract class AbstractCard {
         this.magic = magic;
     }
 
-    public void setExhaust(Boolean exhaust) {
-        isExhaust = exhaust;
-    }
-
     // Hooks into game logic
+    public void onDiscard() {}
+    public void onExhaust() {}
     public void onDrawn() {}
+    public void onShuffleIntoDeck() {}
     public void afterDrawn() {}
+    public void onAddedToDeck() {}
     public void onPlay(AbstractCard enemyCard) {}
     public void onAttack(AbstractCard enemyCard) {}
     public void onDefend(AbstractCard enemyCard) {}
     public void onStalemate(AbstractCard enemyCard) {}
-    public void onCombat(AbstractCard enemyCard) {}
     public void onViciousCombat(AbstractCard enemyCard) {}
-    public void onEnemyHeal(AbstractCard enemyCard, int healedFor, int hpAfterHealing) {}
+    public void afterCombat(AbstractCard enemyCard) {}
 
     @Override
     public boolean equals(Object o) {

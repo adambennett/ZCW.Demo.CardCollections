@@ -2,6 +2,7 @@ package Collector.cards;
 
 import Collector.abstracts.*;
 
+import java.util.*;
 import java.util.concurrent.*;
 
 public class Palasor extends AbstractCard {

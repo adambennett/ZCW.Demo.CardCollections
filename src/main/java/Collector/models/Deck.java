@@ -44,8 +44,6 @@ public class Deck implements Iterable<AbstractCard> {
 
     public Integer size() { return this.contents.size(); }
 
-    public Boolean isEmpty() { return this.contents.size() < 1; }
-
     public Boolean add(AbstractCard card, boolean shuffle, boolean shuffleAll) {
         if (this.isSizeLimited && this.contents.size() + 1 > this.limitSize) return false;
         List<AbstractCard> cards = new ArrayList<>();
@@ -73,7 +71,6 @@ public class Deck implements Iterable<AbstractCard> {
     public Boolean remove(AbstractCard card) {
         return this.contents.remove(card) != null;
     }
-
 
     @Override
     public Iterator<AbstractCard> iterator() {

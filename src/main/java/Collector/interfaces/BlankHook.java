@@ -4,4 +4,5 @@ package Collector.interfaces;
 public interface BlankHook {
 
     void hook();
+
 }

@@ -128,6 +128,10 @@ public class CardArchive {
         archive.add(new Packhouse());
         archive.add(new Halfrot());
         archive.add(new Palasor());
+        archive.add(new Nyoxide());
+        archive.add(new Quilx());
+        archive.add(new Renvar());
+        archive.add(new Builto());
 
         for (AbstractCard c : archive) {
             archived.put(c.getName(), c);

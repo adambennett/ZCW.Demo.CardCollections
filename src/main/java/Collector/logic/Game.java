@@ -1,7 +1,6 @@
 package Collector.logic;
 
 import Collector.abstracts.*;
-import Collector.cards.*;
 import Collector.enums.*;
 import Collector.io.*;
 import Collector.models.*;
@@ -46,14 +45,48 @@ public class Game {
 
     public Game playGame() {
         while (!isFinished()) {
+
+            // 'Discard' last turn cards (or exhaust)
+            if (this.human.getCurrentCard() != null) {
+                var card = this.human.getCurrentCard();
+                if (card.isExhaust()) {
+                    this.human.getCurrentCard().onExhaust();
+                } else {
+                    this.human.getCurrentCard().onDiscard();
+                }
+            }
+            if (this.computer.getCurrentCard() != null) {
+                var card = this.computer.getCurrentCard();
+                if (card.isExhaust()) {
+                    this.computer.getCurrentCard().onExhaust();
+                } else {
+                    this.computer.getCurrentCard().onDiscard();
+                }
+            }
+
+            // Draw cards
             this.human.setCurrentCard(this.human.draw(1).get(0));
             this.computer.setCurrentCard(this.computer.draw(1).get(0));
+
+            // Calculate enemy move
             var enemyMove = this.computer.calculateMove(this.human);
+
+            // afterDraw() hooks and summary
             ScreenPrinter.drawSummary(this.human, this.computer);
             this.human.getCurrentCard().afterDrawn();
             this.computer.getCurrentCard().afterDrawn();
+
+            // Get user move and trigger onPlay() hooks
             var playerMove = ScreenPrinter.promptUserAfterDraw();
+            this.human.getCurrentCard().onPlay(this.computer.getCurrentCard());
+            this.computer.getCurrentCard().onPlay(this.human.getCurrentCard());
+
+            // Combat Step
             var results = Game.calculateCombat(playerMove, enemyMove, this.human, this.computer, false);
+
+            // afterCombat() hooks and show summary
+            this.human.getCurrentCard().afterCombat(this.computer.getCurrentCard());
+            this.computer.getCurrentCard().afterCombat(this.human.getCurrentCard());
             ScreenPrinter.combatSummary(results, this);
         }
         return this;
@@ -72,6 +105,7 @@ public class Game {
         var enemyCard = computer.getCurrentCard();
         String results;
 
+        // BOTH ATTACK
         if (playerMove == CombatMove.ATTACK && enemyMove == CombatMove.ATTACK) {
             if (playerCard.getAttack() > enemyCard.getAttack()) {
                 computer.damage(human.getFullDamage());
@@ -84,9 +118,14 @@ public class Game {
             }
             if (!simulated) {
                 enemyCard.onAttack(playerCard);
+                enemyCard.onViciousCombat(playerCard);
                 playerCard.onAttack(enemyCard);
+                playerCard.onViciousCombat(enemyCard);
             }
-        } else if (playerMove == CombatMove.DEFEND && enemyMove == CombatMove.DEFEND) {
+        }
+
+        // BOTH DEFEND
+        else if (playerMove == CombatMove.DEFEND && enemyMove == CombatMove.DEFEND) {
             human.heal(playerCard.getDefend());
             computer.heal(enemyCard.getDefend());
             if (!simulated) {
@@ -96,7 +135,10 @@ public class Game {
                 enemyCard.onStalemate(playerCard);
             }
             results = "Stalemate - both players healed.";
-        } else if (playerMove == CombatMove.ATTACK) {
+        }
+
+        // PLAYER ATTACK - COMPUTER DEFEND
+        else if (playerMove == CombatMove.ATTACK) {
             if (human.getFullDamage() > computer.getFullDefense()) {
                 var dmg = human.getFullDamage() - computer.getFullDefense();
                 computer.damage(dmg);
@@ -108,7 +150,10 @@ public class Game {
                 playerCard.onAttack(enemyCard);
                 enemyCard.onDefend(playerCard);
             }
-        } else if (playerMove == CombatMove.DEFEND) {
+        }
+
+        // PLAYER DEFEND - COMPUTER ATTACK
+        else if (playerMove == CombatMove.DEFEND) {
             if (computer.getFullDamage() > human.getFullDefense()) {
                 var dmg = computer.getFullDamage() - human.getFullDefense();
                 human.damage(dmg);
@@ -123,6 +168,8 @@ public class Game {
         } else {
             results = "Something unknown occurred?";
         }
+
+        // return summary for ScreenPrinter
         return results;
     }
 }
