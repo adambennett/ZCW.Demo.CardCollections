@@ -7,7 +7,7 @@ public class Halfrot extends AbstractCard {
     private static final String cardText = "Exhaust.";
 
     public Halfrot() {
-        super("Halfrot", 20, 1);
+        super("Halfrot", 20, 20);
         this.text = cardText;
         this.isExhaust = true;
     }

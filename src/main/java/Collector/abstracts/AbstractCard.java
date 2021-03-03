@@ -66,6 +66,9 @@ public abstract class AbstractCard {
 
     public void setAttack(Integer attack) {
         this.attack = attack;
+        if (this.attack < 0) {
+            this.attack = 0;
+        }
     }
 
     public void setDefend(Integer defend) {

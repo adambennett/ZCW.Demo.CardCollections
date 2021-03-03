@@ -8,14 +8,14 @@ public class DeckContents {
 
     private Integer deckSize;
     private final List<AbstractCard> orderedCards;
-    private final Map<AbstractCard, Integer> cardAmounts;
+    private final Map<String, Integer> cardAmounts;
 
     public DeckContents(List<AbstractCard> cards, boolean shuffle) {
         this.orderedCards = shuffle ? new ArrayList<>() : new ArrayList<>(cards);
         this.cardAmounts = new HashMap<>();
         this.deckSize = 0;
         for (AbstractCard card : cards) {
-            this.cardAmounts.merge(card, 1, (k, v) -> v + 1);
+            this.cardAmounts.merge(card.getName(), 1, (k, v) -> v + 1);
             this.deckSize++;
         }
         if (shuffle) {
@@ -48,6 +48,14 @@ public class DeckContents {
         return out;
     }
 
+    public Boolean isInDeck(String cardName) {
+        return this.cardAmounts != null && this.cardAmounts.containsKey(cardName);
+    }
+
+    public Boolean isInDeck(AbstractCard card) {
+        return isInDeck(card.getName());
+    }
+
     public AbstractCard fetch(AbstractCard target) {
         return remove(target);
     }
@@ -67,7 +75,7 @@ public class DeckContents {
         }
 
         for (AbstractCard card : cards) {
-            this.cardAmounts.merge(card, 1, (k, v) -> v + 1);
+            this.cardAmounts.merge(card.getName(), 1, (k, v) -> v + 1);
         }
 
         if (shuffleAll) {
@@ -129,8 +137,8 @@ public class DeckContents {
         }
 
         this.deckSize--;
-        if (this.cardAmounts.containsKey(toRemove)) {
-            this.cardAmounts.put(toRemove, this.cardAmounts.get(toRemove) - 1);
+        if (this.cardAmounts.containsKey(toRemove.getName())) {
+            this.cardAmounts.put(toRemove.getName(), this.cardAmounts.get(toRemove.getName()) - 1);
         }
         return toRemove;
     }

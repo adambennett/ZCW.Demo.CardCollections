@@ -132,6 +132,9 @@ public class CardArchive {
         archive.add(new Quilx());
         archive.add(new Renvar());
         archive.add(new Builto());
+        archive.add(new Keflew());
+        archive.add(new Seplew());
+        archive.add(new Jeqlew());
 
         for (AbstractCard c : archive) {
             archived.put(c.getName(), c);

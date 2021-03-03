@@ -43,7 +43,7 @@ public class ScreenPrinter {
     }
 
     private static int getTextWidth(AbstractCard player, AbstractCard enemy) {
-        return (player.getText().length() >= enemy.getText().length()) ? player.getText().length() + 6 : enemy.getText().length() + 6;
+        return (player.getText().length() >= enemy.getText().length()) ? player.getText().length() + 10 : enemy.getText().length() + 10;
     }
 
     private static int getCardWidth(AbstractCard player, AbstractCard enemy) {

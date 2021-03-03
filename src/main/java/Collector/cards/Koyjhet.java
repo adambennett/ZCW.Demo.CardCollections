@@ -5,7 +5,7 @@ import Collector.abstracts.*;
 public class Koyjhet extends AbstractCard {
 
     private static final String cardText = "If you stalemate this round, gain +!M! ATK for the rest of the game.";
-    private static final Integer baseMagic = 5;
+    private static final Integer baseMagic = 8;
 
     public Koyjhet() {
         super("Koyjhet", 6, 7);
