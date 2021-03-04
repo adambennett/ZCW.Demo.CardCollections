@@ -42,8 +42,6 @@ public class Deck implements Iterable<AbstractCard> {
 
     public Boolean isInDeck(String cardName) { return this.contents.isInDeck(cardName); }
 
-    public Boolean isInDeck(AbstractCard card) { return this.contents.isInDeck(card); }
-
     public String getName() { return this.name; }
 
     public Integer size() { return this.contents.size(); }

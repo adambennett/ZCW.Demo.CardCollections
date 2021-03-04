@@ -1,7 +1,7 @@
 package Collector;
 
-import Collector.io.*;
 import Collector.logic.*;
+import Collector.utilities.*;
 
 public class CardBattle { public static void main(String[] args) { main(); }
 

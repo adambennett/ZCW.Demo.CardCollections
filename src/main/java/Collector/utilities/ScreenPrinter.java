@@ -1,10 +1,9 @@
-package Collector.io;
+package Collector.utilities;
 
 import Collector.abstracts.*;
 import Collector.enums.*;
 import Collector.logic.*;
 import Collector.models.*;
-import Collector.utilities.*;
 import io.bretty.console.table.*;
 
 import java.util.*;
