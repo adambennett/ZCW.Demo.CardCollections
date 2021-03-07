@@ -1,11 +1,9 @@
 package Collector.logic;
 
-import Collector.abstracts.*;
 import Collector.enums.*;
+import Collector.interfaces.*;
+import Collector.io.*;
 import Collector.models.*;
-import Collector.utilities.*;
-
-import java.util.*;
 
 public class Game {
 
@@ -29,17 +27,9 @@ public class Game {
         return newGame;
     }
 
-    public Game setupGame() {
-        Collection<AbstractCard> playerCards = new ArrayList<>();
-        Collection<AbstractCard> computerCards = new ArrayList<>();
-        for (var i = 0; i < this.cards; i++) {
-            playerCards.add(CardArchive.randomCard());
-        }
-        for (var i = 0; i < this.cards; i++) {
-            computerCards.add(CardArchive.randomCard());
-        }
-        this.human = new Player(playerName, playerName + "'s Deck", startingHP, playerCards);
-        this.computer = new ComputerEnemy(computerName, computerName + "'s Deck", startingHP, computerCards);
+    public Game setupPlayers() {
+        this.human = new Player(playerName, startingHP, this.cards);
+        this.computer = new ComputerEnemy(computerName, startingHP, this.cards);
         return this;
     }
 
@@ -139,7 +129,13 @@ public class Game {
 
         // PLAYER ATTACK - COMPUTER DEFEND
         else if (playerMove == CombatMove.ATTACK) {
-            if (human.getFullDamage() > computer.getFullDefense()) {
+            // Java 15 and below
+            //boolean enemyAutoWins = enemyCard instanceof Defender && ((Defender)enemyCard).autoWinCombat(playerCard);
+
+            // Java 16+
+            boolean enemyAutoWins = enemyCard instanceof Defender defCard && defCard.autoWinCombat(playerCard);
+
+            if (human.getFullDamage() > computer.getFullDefense() && !enemyAutoWins) {
                 var dmg = human.getFullDamage() - computer.getFullDefense();
                 computer.damage(dmg);
                 results = "Enemy took " + dmg + " damage.";
@@ -154,7 +150,13 @@ public class Game {
 
         // PLAYER DEFEND - COMPUTER ATTACK
         else if (playerMove == CombatMove.DEFEND) {
-            if (computer.getFullDamage() > human.getFullDefense()) {
+            // Java 15 and below
+            //boolean playerAutoWins = playerCard instanceof Defender && ((Defender)playerCard).autoWinCombat(enemyCard);
+
+            // Java 16+
+            boolean playerAutoWins = playerCard instanceof Defender defCard && defCard.autoWinCombat(enemyCard);
+
+            if (computer.getFullDamage() > human.getFullDefense() && !playerAutoWins) {
                 var dmg = computer.getFullDamage() - human.getFullDefense();
                 human.damage(dmg);
                 results =  "You took " + dmg + " damage.";

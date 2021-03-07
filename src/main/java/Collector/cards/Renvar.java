@@ -1,10 +1,9 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
-import java.util.concurrent.*;
-
-public class Renvar extends AbstractCard {
+public class Renvar extends CollectorCard {
 
     private static final String cardText = "After combat, deal !M! damage to the opponent directly.";
     private static final Integer baseMagic = 5;

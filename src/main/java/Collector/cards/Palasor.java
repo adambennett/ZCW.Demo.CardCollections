@@ -1,11 +1,9 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
-import java.util.*;
-import java.util.concurrent.*;
-
-public class Palasor extends AbstractCard {
+public class Palasor extends CollectorCard {
 
     private static final String cardText = "If you defend with this card, give all cards in your deck +!M! ATK and DEF.";
     private static final Integer baseMagic = 4;

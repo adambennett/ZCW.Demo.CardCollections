@@ -8,8 +8,12 @@ import java.util.*;
 
 public class ComputerEnemy extends Player {
 
-    public ComputerEnemy(String name, String deckName, int maxHP, Collection<AbstractCard> cards) {
-        super(name, deckName, maxHP, cards);
+    public ComputerEnemy(String name, int maxHP, int numCards) {
+        super(name, maxHP, numCards);
+    }
+
+    public ComputerEnemy(String name, int maxHP, Collection<AbstractCard> cards) {
+        super(name, maxHP, cards);
     }
 
     public CombatMove calculateMove(Player enemy) {
@@ -51,7 +55,7 @@ public class ComputerEnemy extends Player {
 
     @Override
     public ComputerEnemy copy() {
-        var out = new ComputerEnemy(this.getName(), this.getDeck().getName(), this.getMaxHP(), this.getDeck().getList());
+        var out = new ComputerEnemy(this.getName(), this.getMaxHP(), this.getDeck().getList());
         out.setCurrentHP(this.getCurrentHP());
         out.setCurrentCard(this.getCurrentCard());
         return out;

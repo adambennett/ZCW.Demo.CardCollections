@@ -1,8 +1,8 @@
 package Collector.cards;
 
-import Collector.abstracts.*;
+import Collector.models.*;
 
-public class Halfrot extends AbstractCard {
+public class Halfrot extends CollectorCard {
 
     private static final String cardText = "Exhaust.";
 

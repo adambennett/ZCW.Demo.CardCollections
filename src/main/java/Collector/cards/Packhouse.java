@@ -1,8 +1,9 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
-public class Packhouse extends AbstractCard {
+public class Packhouse extends CollectorCard {
 
     private static final String cardText = "If you attack with this card, add !M! copies of Tokan to your deck.";
     private static final Integer baseMagic = 3;

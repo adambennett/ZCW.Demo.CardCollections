@@ -1,10 +1,11 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
 import java.util.concurrent.*;
 
-public class Spimoky extends AbstractCard {
+public class Spimoky extends CollectorCard {
 
     private static final String cardText = "When you draw this card, set its ATK and DEF to random values.";
     private static final Integer baseMagic = 5;
@@ -31,6 +32,8 @@ public class Spimoky extends AbstractCard {
 
     @Override
     public Spimoky copy() {
-        return new Spimoky();
+        var spimokyCopy = new Spimoky();
+        spimokyCopy.setOwner(this.getOwner());
+        return spimokyCopy;
     }
 }

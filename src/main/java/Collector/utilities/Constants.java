@@ -21,4 +21,10 @@ public class Constants {
      * Starting # of cards in deck if none is entered
      */
     public static Integer   DefaultStartCards       = 31;
+
+
+    /**
+     * The extra amount of damage dealt by Vicious cards during combats where both players have chosen to Attack (Vicious Combat)
+     */
+    public static Integer ViciousDamageBonus        = 4;
 }

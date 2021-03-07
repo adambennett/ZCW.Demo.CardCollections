@@ -1,8 +1,10 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.interfaces.*;
+import Collector.models.*;
 
-public class Keflew extends AbstractCard {
+public class Keflew extends CollectorCard implements Unique {
 
     private static final String cardText = "After combat, loses 2 ATK.";
 

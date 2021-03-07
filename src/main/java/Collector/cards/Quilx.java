@@ -1,8 +1,9 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
-public class Quilx extends AbstractCard {
+public class Quilx extends CollectorCard {
 
     private static final String cardText = "When you defend with this card, gain !M! maximum HP for each card left in your deck.";
     private static final Integer baseMagic = 1;

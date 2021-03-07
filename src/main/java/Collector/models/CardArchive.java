@@ -20,7 +20,7 @@ public class CardArchive {
     }
 
     public static AbstractCard get(AbstractCard card) {
-        return null;
+        return archived.getOrDefault(card.getName(), null);
     }
 
     static {
@@ -136,6 +136,7 @@ public class CardArchive {
         archive.add(new Seplew());
         archive.add(new Jeqlew());
         archive.add(new Sprokked());
+        archive.add(new Rhearst());
 
         for (AbstractCard c : archive) {
             archived.put(c.getName(), c);

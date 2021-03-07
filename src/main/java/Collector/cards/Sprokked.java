@@ -1,8 +1,9 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
-public class Sprokked extends AbstractCard {
+public class Sprokked extends CollectorCard {
 
     private static final String cardText = "After combat, lose !M! HP.";
     private static final Integer baseMagic = 10;

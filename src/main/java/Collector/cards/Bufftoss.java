@@ -1,10 +1,10 @@
 package Collector.cards;
 
-import Collector.abstracts.*;
+import Collector.models.*;
 
 import java.util.concurrent.*;
 
-public class Bufftoss extends AbstractCard {
+public class Bufftoss extends CollectorCard {
 
     private static final String cardText = "When drawn, gain ATK equal to the ATK of a random card in your deck.";
 

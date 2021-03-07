@@ -1,8 +1,8 @@
 package Collector.cards;
 
-import Collector.abstracts.*;
+import Collector.models.*;
 
-public class Tokan extends AbstractCard {
+public class Tokan extends CollectorCard {
 
     private static final String cardText = "When drawn, gain !M! maximum HP.";
     private static final Integer baseMagic = 5;

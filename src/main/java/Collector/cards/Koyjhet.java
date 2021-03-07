@@ -1,8 +1,9 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
-public class Koyjhet extends AbstractCard {
+public class Koyjhet extends CollectorCard {
 
     private static final String cardText = "If you stalemate this round, gain +!M! ATK for the rest of the game.";
     private static final Integer baseMagic = 8;

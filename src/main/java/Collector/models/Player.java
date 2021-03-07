@@ -1,6 +1,7 @@
 package Collector.models;
 
 import Collector.abstracts.*;
+import Collector.interfaces.*;
 import Collector.utilities.*;
 
 import java.util.*;
@@ -14,12 +15,12 @@ public class Player {
     private Integer permAttackBonus;
     private Integer permDefendBonus;
     private final String name;
-    private final Deck deck;
+    private Deck deck;
     private final List<AbstractCard> discard;
     private final List<AbstractCard> exhaust;
     private AbstractCard currentCard;
 
-    public Player(String name, String deckName, int maxHP, Collection<AbstractCard> cards) {
+    public Player(String name, int maxHP, Integer numCards) {
         this.name = name;
         this.maxHP = maxHP;
         this.currentHP = maxHP;
@@ -29,6 +30,13 @@ public class Player {
         this.permDefendBonus = 0;
         this.discard = new ArrayList<>();
         this.exhaust = new ArrayList<>();
+        if (numCards != null) {
+            this.deck = new Deck(name + "'s Deck", this.setupDeck(numCards), -1);
+        }
+    }
+
+    public Player(String name, int maxHP, Collection<AbstractCard> cards) {
+        this(name, maxHP, (Integer) null);
         var actual = new ArrayList<AbstractCard>();
         for (AbstractCard c : cards) {
             var copy = c.copy();
@@ -36,7 +44,25 @@ public class Player {
             copy.onAddedToDeck();
             actual.add(copy);
         }
-        this.deck = new Deck(deckName, actual, -1);
+        this.deck = new Deck(name + "'s Deck", actual, -1);
+    }
+
+    private ArrayList<AbstractCard> setupDeck(int numberOfCards) {
+        var actual = new ArrayList<AbstractCard>();
+        var added = new HashMap<String, AbstractCard>();
+        while (actual.size() < numberOfCards) {
+            var copy = CardArchive.randomCard();
+            var allowed = copy != null && (!((copy instanceof Unique) && added.containsKey(copy.getName())));
+            if (allowed) {
+                copy.setOwner(this);
+                copy.onAddedToDeck();
+                actual.add(copy);
+                added.put(copy.getName(), copy);
+            } else {
+                return actual;
+            }
+        }
+        return actual;
     }
 
     /**
@@ -73,7 +99,7 @@ public class Player {
      * @return The new copy of this player.
      */
     public Player copy(){
-        var out = new Player(this.name, this.deck.getName(), this.maxHP, this.deck.getList());
+        var out = new Player(this.name, this.maxHP, this.deck.getList());
         out.setCurrentHP(this.currentHP);
         out.setCurrentCard(this.currentCard);
         return out;
@@ -85,7 +111,13 @@ public class Player {
      * @return The full ATK value of the player's card + all bonuses.
      */
     public Integer getFullDamage() {
-        return this.getCurrentCard().getAttack() + this.getAttackBonus() + this.getPermAttackBonus();
+        var dmg = this.getCurrentCard().getAttack() + this.getAttackBonus() + this.getPermAttackBonus();
+
+        if (this.getCurrentCard() instanceof Vicious) {
+            dmg += Constants.ViciousDamageBonus;
+        }
+
+        return dmg;
     }
 
     /**
@@ -192,6 +224,24 @@ public class Player {
     }
 
     /**
+     * Give this player a temporary attack bonus. Lasts 1 round.
+     *
+     * @param amt The amount of attack bonus to add to the player's existing attack bonus.
+     */
+    public void increaseAttackBonus(int amt) {
+        this.attackBonus += amt;
+    }
+
+    /**
+     * Give this player a temporary defense bonus. Lasts 1 round.
+     *
+     * @param amt The amount of defense bonus to add to the player's existing defense bonus.
+     */
+    public void increaseDefenseBonus(int amt) {
+        this.defendBonus += amt;
+    }
+
+    /**
      * Give this player a permanent attack bonus.
      *
      * @param amt The amount of attack bonus to add to the player's existing attack bonus.
@@ -229,4 +279,6 @@ public class Player {
     public void setCurrentCard(AbstractCard currentCard) {
         this.currentCard = currentCard;
     }
+
+
 }

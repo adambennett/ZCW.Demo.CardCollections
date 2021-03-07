@@ -1,9 +1,10 @@
-package Collector.utilities;
+package Collector.io;
 
 import Collector.abstracts.*;
 import Collector.enums.*;
 import Collector.logic.*;
 import Collector.models.*;
+import Collector.utilities.*;
 import io.bretty.console.table.*;
 
 import java.util.*;
@@ -23,6 +24,28 @@ public class ScreenPrinter {
     }
 
     public static Game gameSetup() {
+
+       // Initial menu
+            // Load Player
+            // New Player
+
+       // Load Player menu
+            // list all players with numbers, accept number input for loading or a go back num
+
+        // New Player 'menu'
+            // what is your name?
+            // how much starting HP do you have?
+            // create player and load automatically
+
+        // Main menu
+            // start game (or continue game)
+            // edit deck
+            // change starting hp
+            // change name
+            // card library
+            // delete player
+
+
         var input = getStringInput("Welcome to the card battle! What is your name?\n");
         if (input == null || input.equalsIgnoreCase("")) {
             input = Constants.DefaultPlayerName;
@@ -52,7 +75,7 @@ public class ScreenPrinter {
 
     private static int getNameWidth(Player player, Player enemy) {
         var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 6 : enemy.getName().length() + 6;
-        return Math.max(width, 32);
+        return Math.max(width, 28);
     }
 
     public static void drawSummary(Player human, ComputerEnemy opponent) {
@@ -62,8 +85,8 @@ public class ScreenPrinter {
         var playerWidth = getNameWidth(human, opponent);
         var cardWidth   = getCardWidth(player, enemy);
         var leftWidth   = 8;
-        var atkWidth    = 10;
-        var defWidth    = 10;
+        var atkWidth    = 16;
+        var defWidth    = 16;
         var hpWidth     = 12;
         var textWidth = getTextWidth(player, enemy);
         ColumnFormatter<String> playerFormatter = ColumnFormatter.text(Alignment.CENTER, playerWidth);
@@ -95,11 +118,11 @@ public class ScreenPrinter {
         System.out.println(table);
     }
 
-    private static String lineBreak(int length) {
+    public static String lineBreak(int length) {
         return lineBreak(length, null);
     }
 
-    private static String lineBreak(int length, String spacer) {
+    public static String lineBreak(int length, String spacer) {
         StringBuilder out = new StringBuilder();
         if (spacer == null) {
             spacer = "-";

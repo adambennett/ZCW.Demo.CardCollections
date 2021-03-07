@@ -1,8 +1,9 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.models.*;
 
-public class Builto extends AbstractCard {
+public class Builto extends CollectorCard {
 
     private static final String cardText = "Gain a DEF bonus for the rest of combat equal to the number of cards left in your deck.";
 
