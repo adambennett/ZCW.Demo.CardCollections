@@ -1,6 +1,7 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.enums.*;
 import Collector.models.*;
 
 public class Nyoxide extends CollectorCard {
@@ -21,7 +22,7 @@ public class Nyoxide extends CollectorCard {
     }
 
     @Override
-    public void onPlay(AbstractCard enemyCard) {
+    public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         for (var c : getOwner().getDeck()) {
             c.setMagic(c.getMagic() + this.getMagic());
         }

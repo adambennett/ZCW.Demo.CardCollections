@@ -1,5 +1,6 @@
 package Collector.abstracts;
 
+import Collector.enums.*;
 import Collector.models.*;
 
 import java.util.*;
@@ -88,11 +89,11 @@ public abstract class AbstractCard {
     // Hooks into game logic
     public void onDiscard() {}
     public void onExhaust() {}
-    public void onDrawn() {}
+    public void onDrawn(Player enemy) {}
     public void onShuffleIntoDeck() {}
     public void afterDrawn() {}
     public void onAddedToDeck() {}
-    public void onPlay(AbstractCard enemyCard) {}
+    public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {}
     public void onAttack(AbstractCard enemyCard) {}
     public void onDefend(AbstractCard enemyCard) {}
     public void onStalemate(AbstractCard enemyCard) {}

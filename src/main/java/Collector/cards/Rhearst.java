@@ -1,6 +1,7 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.enums.*;
 import Collector.models.*;
 
 public class Rhearst extends CollectorCard {
@@ -22,7 +23,7 @@ public class Rhearst extends CollectorCard {
     }
 
     @Override
-    public void onPlay(AbstractCard enemyCard) {
+    public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         enemyCard.getOwner().increaseDefenseBonus(-this.getMagic());
     }
 

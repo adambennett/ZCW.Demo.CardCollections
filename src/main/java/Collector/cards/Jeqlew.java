@@ -21,7 +21,7 @@ public class Jeqlew extends CollectorCard implements Unique {
     }
 
     @Override
-    public void onDrawn() {
+    public void onDrawn(Player enemy) {
         var hasCard = this.getOwner().getDeck().isInDeck("Keplew") || this.getOwner().getDeck().isInDeck("Seplew");
         if (!hasCard) return;
 

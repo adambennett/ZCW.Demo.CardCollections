@@ -1,6 +1,7 @@
 package Collector.cards;
 
 import Collector.abstracts.*;
+import Collector.enums.*;
 import Collector.models.*;
 
 public class Builto extends CollectorCard {
@@ -18,7 +19,7 @@ public class Builto extends CollectorCard {
     }
 
     @Override
-    public void onPlay(AbstractCard enemyCard) {
+    public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         this.getOwner().increasePermDefenseBonus(this.getOwner().getDeck().size());
     }
 

@@ -20,7 +20,7 @@ public class Healbot extends CollectorCard {
     }
 
     @Override
-    public void onDrawn() {
+    public void onDrawn(Player enemy) {
         this.getOwner().heal(this.getMagic());
     }
 

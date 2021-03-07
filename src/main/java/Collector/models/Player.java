@@ -1,6 +1,7 @@
 package Collector.models;
 
 import Collector.abstracts.*;
+import Collector.cards.*;
 import Collector.interfaces.*;
 import Collector.utilities.*;
 
@@ -14,7 +15,7 @@ public class Player {
     private Integer defendBonus;
     private Integer permAttackBonus;
     private Integer permDefendBonus;
-    private final String name;
+    private String name;
     private Deck deck;
     private final List<AbstractCard> discard;
     private final List<AbstractCard> exhaust;
@@ -47,6 +48,14 @@ public class Player {
         this.deck = new Deck(name + "'s Deck", actual, -1);
     }
 
+
+    /**
+     * Create a random deck for a player based on just a given number of cards.
+     * Filters out Unique cards such that only 1 copy at max appears in any deck.
+     *
+     * @param numberOfCards the number of cards the deck should have after creation
+     * @return the deck list
+     */
     private ArrayList<AbstractCard> setupDeck(int numberOfCards) {
         var actual = new ArrayList<AbstractCard>();
         var added = new HashMap<String, AbstractCard>();
@@ -58,7 +67,7 @@ public class Player {
                 copy.onAddedToDeck();
                 actual.add(copy);
                 added.put(copy.getName(), copy);
-            } else {
+            } else if (copy == null) {
                 return actual;
             }
         }
@@ -71,7 +80,7 @@ public class Player {
      * @param amt the number of cards to draw
      * @return the list of cards drawn from the deck
      */
-    public List<AbstractCard> draw(int amt) {
+    public List<AbstractCard> draw(int amt, Player enemy) {
         this.attackBonus = 0;
         this.defendBonus = 0;
         if (this.deck.size() < 2) {
@@ -83,7 +92,7 @@ public class Player {
         }
         var cards = this.deck.draw(amt);
         for (var card : cards) {
-            card.onDrawn();
+            card.onDrawn(enemy);
             if (card.isExhaust()) {
                 this.exhaust.add(card);
             } else {
@@ -166,35 +175,6 @@ public class Player {
         return this.getCurrentCard().getName();
     }
 
-
-    public String getName() {
-        return name;
-    }
-    public Integer getMaxHP() {
-        return maxHP;
-    }
-    public Integer getCurrentHP() {
-        return currentHP;
-    }
-    public Deck getDeck() {
-        return deck;
-    }
-    public AbstractCard getCurrentCard() {
-        return currentCard;
-    }
-    public Integer getAttackBonus() {
-        return attackBonus;
-    }
-    public Integer getDefendBonus() {
-        return defendBonus;
-    }
-    public Integer getPermAttackBonus() {
-        return permAttackBonus;
-    }
-    public Integer getPermDefendBonus() {
-        return permDefendBonus;
-    }
-
     /**
      * Deals damage to this player.
      *
@@ -271,14 +251,36 @@ public class Player {
         }
     }
 
-    /**
-     * Change which card the player has active.
-     *
-     * @param currentCard The card to set active for the player.
-     */
-    public void setCurrentCard(AbstractCard currentCard) {
-        this.currentCard = currentCard;
+    // Plain getters & setters
+    public String getName() {
+        return name;
     }
-
-
+    public Integer getMaxHP() {
+        return maxHP;
+    }
+    public Integer getCurrentHP() {
+        return currentHP;
+    }
+    public Deck getDeck() {
+        return deck;
+    }
+    public AbstractCard getCurrentCard() {
+        return currentCard;
+    }
+    public Integer getAttackBonus() {
+        return attackBonus;
+    }
+    public Integer getDefendBonus() {
+        return defendBonus;
+    }
+    public Integer getPermAttackBonus() {
+        return permAttackBonus;
+    }
+    public Integer getPermDefendBonus() {
+        return permDefendBonus;
+    }
+    public void setCurrentCard(AbstractCard currentCard) { this.currentCard = currentCard; }
+    public void setMaxHP(Integer maxHP) { this.maxHP = maxHP; }
+    public void setName(String name) { this.name = name; }
+    public void setDeck(Deck deck) { this.deck = deck; }
 }

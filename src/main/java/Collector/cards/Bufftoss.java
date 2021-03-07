@@ -19,7 +19,7 @@ public class Bufftoss extends CollectorCard {
     }
 
     @Override
-    public void onDrawn() {
+    public void onDrawn(Player enemy) {
         var deckSize = this.getOwner().getDeck().size();
         int inc;
         if (deckSize == 1) {

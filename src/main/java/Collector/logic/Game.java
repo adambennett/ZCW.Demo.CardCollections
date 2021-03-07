@@ -1,5 +1,6 @@
 package Collector.logic;
 
+import Collector.*;
 import Collector.enums.*;
 import Collector.interfaces.*;
 import Collector.io.*;
@@ -7,33 +8,22 @@ import Collector.models.*;
 
 public class Game {
 
-    private final Integer startingHP;
-    private final Integer cards;
-    private final String playerName;
-    private final String computerName;
     private Player human;
     private ComputerEnemy computer;
 
-    public Game(String player, int startHP, int cards) {
-        this.playerName = player;
-        this.startingHP = startHP;
-        this.cards = cards;
-        this.computerName = "Kris Younger";
+    public static void startGame(Player player) {
+        CardBattle.currentGame = new Game();
+        CardBattle.currentGame.setupPlayers(player).playGame().finishGame();
+        CardBattle.navigation.loadMenu();
     }
 
-    public static Game createGame() {
-        Game newGame = ScreenPrinter.gameSetup();
-        ScreenPrinter.startGame();
-        return newGame;
-    }
-
-    public Game setupPlayers() {
-        this.human = new Player(playerName, startingHP, this.cards);
-        this.computer = new ComputerEnemy(computerName, startingHP, this.cards);
+    private Game setupPlayers(Player player) {
+        this.human = player;
+        this.computer = new ComputerEnemy("Kris Younger", player.getMaxHP(), player.getDeck().size());
         return this;
     }
 
-    public Game playGame() {
+    private Game playGame() {
         while (!isFinished()) {
 
             // 'Discard' last turn cards (or exhaust)
@@ -55,8 +45,8 @@ public class Game {
             }
 
             // Draw cards
-            this.human.setCurrentCard(this.human.draw(1).get(0));
-            this.computer.setCurrentCard(this.computer.draw(1).get(0));
+            this.human.setCurrentCard(this.human.draw(1, this.computer).get(0));
+            this.computer.setCurrentCard(this.computer.draw(1, this.human).get(0));
 
             // Calculate enemy move
             var enemyMove = this.computer.calculateMove(this.human);
@@ -68,8 +58,8 @@ public class Game {
 
             // Get user move and trigger onPlay() hooks
             var playerMove = ScreenPrinter.promptUserAfterDraw();
-            this.human.getCurrentCard().onPlay(this.computer.getCurrentCard());
-            this.computer.getCurrentCard().onPlay(this.human.getCurrentCard());
+            this.human.getCurrentCard().onPlay(this.computer.getCurrentCard(), playerMove);
+            this.computer.getCurrentCard().onPlay(this.human.getCurrentCard(), playerMove);
 
             // Combat Step
             var results = Game.calculateCombat(playerMove, enemyMove, this.human, this.computer, false);
@@ -86,7 +76,7 @@ public class Game {
         return this.human.getCurrentHP() < 1 || this.computer.getCurrentHP() < 1;
     }
 
-    public void finishGame() {
+    private void finishGame() {
         ScreenPrinter.gameOver(this.human.getCurrentHP() > this.computer.getCurrentHP());
     }
 

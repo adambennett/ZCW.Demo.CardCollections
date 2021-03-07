@@ -4,16 +4,11 @@ import Collector.abstracts.*;
 import Collector.enums.*;
 import Collector.logic.*;
 import Collector.models.*;
-import Collector.utilities.*;
 import io.bretty.console.table.*;
 
 import java.util.*;
 
 public class ScreenPrinter {
-
-    public static Boolean gameLoop() {
-        return getStringInput("Would you like to do a card battle? Y/N:\n").toLowerCase().contains("y");
-    }
 
     public static void gameOver(boolean win) {
         if (win) {
@@ -23,59 +18,13 @@ public class ScreenPrinter {
         }
     }
 
-    public static Game gameSetup() {
-
-       // Initial menu
-            // Load Player
-            // New Player
-
-       // Load Player menu
-            // list all players with numbers, accept number input for loading or a go back num
-
-        // New Player 'menu'
-            // what is your name?
-            // how much starting HP do you have?
-            // create player and load automatically
-
-        // Main menu
-            // start game (or continue game)
-            // edit deck
-            // change starting hp
-            // change name
-            // card library
-            // delete player
-
-
-        var input = getStringInput("Welcome to the card battle! What is your name?\n");
-        if (input == null || input.equalsIgnoreCase("")) {
-            input = Constants.DefaultPlayerName;
-        }
-        var hpOption = getStringInput("How much HP should each player start with?\n");
-        try {
-            var hp = Integer.parseInt(hpOption);
-            var cards = Integer.parseInt(getStringInput("How many cards per deck?\n"));
-            return new Game(input, hp, cards);
-        } catch (Exception ex) {
-            return new Game(input, Constants.DefaultStartHP, Constants.DefaultStartCards);
-        }
+    public static CombatMove promptUserAfterDraw() {
+        var input = getStringInput("\nAttack or Defend? A/D:\n");
+        return input.equalsIgnoreCase("a") ? CombatMove.ATTACK : CombatMove.DEFEND;
     }
 
-    public static void startGame() {
-        System.out.println("The battle begins!\n");
-    }
-
-    private static int getTextWidth(AbstractCard player, AbstractCard enemy) {
-        return (player.getText().length() >= enemy.getText().length()) ? player.getText().length() + 10 : enemy.getText().length() + 10;
-    }
-
-    private static int getCardWidth(AbstractCard player, AbstractCard enemy) {
-        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 6 : enemy.getName().length() + 6;
-        return Math.max(width, 30);
-    }
-
-    private static int getNameWidth(Player player, Player enemy) {
-        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 6 : enemy.getName().length() + 6;
-        return Math.max(width, 28);
+    public static void combatSummary(String results, Game game) {
+        System.out.println("\n\nCOMBAT SUMMARY:\n" + results + "\n\n");
     }
 
     public static void drawSummary(Player human, ComputerEnemy opponent) {
@@ -118,6 +67,30 @@ public class ScreenPrinter {
         System.out.println(table);
     }
 
+    private static int getTextWidth(AbstractCard player, AbstractCard enemy) {
+        return (player.getText().length() >= enemy.getText().length()) ? player.getText().length() + 10 : enemy.getText().length() + 10;
+    }
+
+    private static int getCardWidth(AbstractCard player, AbstractCard enemy) {
+        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 6 : enemy.getName().length() + 6;
+        return Math.max(width, 30);
+    }
+
+    private static int getNameWidth(Player player, Player enemy) {
+        var width = (player.getName().length() >= enemy.getName().length()) ? player.getName().length() + 6 : enemy.getName().length() + 6;
+        return Math.max(width, 28);
+    }
+
+    public static String getStringInput(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
+
+    public static String spacer(int length) {
+        return " ".repeat(Math.max(0, length));
+    }
+
     public static String lineBreak(int length) {
         return lineBreak(length, null);
     }
@@ -131,20 +104,44 @@ public class ScreenPrinter {
         return out.toString();
     }
 
-    public static CombatMove promptUserAfterDraw() {
-        var input = getStringInput("\nAttack or Defend? A/D:\n");
-        return input.equalsIgnoreCase("a") ? CombatMove.ATTACK : CombatMove.DEFEND;
-    }
+    // Initial menu
+        // Load Player
+        // New Player
 
-    public static void combatSummary(String results, Game game) {
-        System.out.println("\n\nCOMBAT SUMMARY:\n" + results + "\n\n");
-    }
+    // Load Player menu
+        // list all players with numbers, accept number input for loading or a go back num
 
-    public static String getStringInput(String prompt) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(prompt);
-        return scanner.nextLine();
-    }
+    // New Player 'menu'
+        // what is your name?
+        // how much starting HP do you have?
+        // create player and load automatically
 
+    // Main menu
+        // start game (or continue game)
+        // edit deck
+        // change starting hp
+        // change name
+        // card library
+        // delete player
+
+    // Deck Modification Menu
+        // Add Cards
+        // Remove Cards
+
+    // Add Cards Menu
+        // List of all cards with commands
+        // Go back
+
+    // Remove Cards Menu
+        // List of all cards in deck with commands
+        // Go back
+
+    // Brawl Menu
+        // All Spimoky
+        // Random Starting HP
+        // Random Deck
+        // Cursed Decks
+        // Seplew Bonanza
+        // Nyoxide's Nightmare
 
 }

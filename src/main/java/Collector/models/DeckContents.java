@@ -15,7 +15,11 @@ public class DeckContents {
         this.cardAmounts = new HashMap<>();
         this.deckSize = 0;
         for (AbstractCard card : cards) {
-            this.cardAmounts.merge(card.getName(), 1, (k, v) -> v + 1);
+            if (this.cardAmounts.containsKey(card.getName())) {
+                this.cardAmounts.put(card.getName(), this.cardAmounts.get(card.getName()) + 1);
+            } else {
+                this.cardAmounts.put(card.getName(), 1);
+            }
             this.deckSize++;
         }
         if (shuffle) {
@@ -75,7 +79,11 @@ public class DeckContents {
         }
 
         for (AbstractCard card : cards) {
-            this.cardAmounts.merge(card.getName(), 1, (k, v) -> v + 1);
+            if (this.cardAmounts.containsKey(card.getName())) {
+                this.cardAmounts.put(card.getName(), this.cardAmounts.get(card.getName()) + 1);
+            } else {
+                this.cardAmounts.put(card.getName(), 1);
+            }
         }
 
         if (shuffleAll) {

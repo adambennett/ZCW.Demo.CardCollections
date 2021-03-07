@@ -4,18 +4,25 @@ import Collector.abstracts.*;
 
 public class MenuNavigation {
 
+    private MenuHandler activeMenu;
+
     public void initializeMenus() {
-        goToMenu(new InitialMenu());
+        this.goToMenu(new InitialMenu());
     }
 
     public void goToMenu(MenuHandler menu) {
-        var prompt = menu.printMenu();
+        this.activeMenu = menu;
+        var prompt = this.activeMenu.printMenu();
         var command = ScreenPrinter.getStringInput(prompt);
         try {
             var intCommand = Integer.parseInt(command);
-            menu.processCommand(intCommand, prompt);
+            this.activeMenu.processCommand(intCommand, prompt);
         } catch (Exception ex) {
-            menu.badCommand(prompt);
+            this.activeMenu.badCommand(prompt);
         }
+    }
+
+    public void loadMenu() {
+        this.goToMenu(this.activeMenu);
     }
 }

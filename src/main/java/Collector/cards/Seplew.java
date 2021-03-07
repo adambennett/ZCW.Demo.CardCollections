@@ -21,7 +21,7 @@ public class Seplew extends CollectorCard implements Unique {
     }
 
     @Override
-    public void onDrawn() {
+    public void onDrawn(Player enemy) {
         for (var i = 0; i < this.getMagic(); i++) {
             this.getOwner().getDeck().add(CardArchive.randomCard(), true, false);
         }

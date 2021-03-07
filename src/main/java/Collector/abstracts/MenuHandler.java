@@ -1,5 +1,6 @@
 package Collector.abstracts;
 
+import Collector.*;
 import Collector.enums.*;
 import Collector.interfaces.*;
 import Collector.io.*;
@@ -26,7 +27,7 @@ public abstract class MenuHandler {
     public MenuHandler() {
         commandWidth = 10;
         optionWidth = 30;
-        descriptionWidth = 90;
+        descriptionWidth = 60;
 
         quitCommand = 0;
         quitOption = "Quit";
@@ -40,40 +41,52 @@ public abstract class MenuHandler {
         textBeforeFunctionality = new HashMap<>();
 
         this.initializeCommands();
+        this.autoQuitSetup();
     }
 
     protected abstract void initializeCommands();
+
+    public static String descSpacer() {
+        return "    ";
+    }
+
+    protected void generateInnerMenu(List<String> commandList, List<String> optionList, List<String> descriptionList) {
+        for (var entry : this.commands.entrySet()) {
+            commandList.add("" + entry.getKey());
+            optionList.add(this.commandDisplayText.get(entry.getValue()));
+            descriptionList.add(descSpacer() + this.commandDescriptionText.get(entry.getValue()));
+        }
+        var quitCommand = commandList.remove(1);
+        var quitOption = optionList.remove(1);
+        var quitDesc = descriptionList.remove(1);
+        commandList.add(quitCommand);
+        optionList.add(quitOption);
+        descriptionList.add(quitDesc);
+    }
 
     public String printMenu() {
         var commandWidth = this.commandWidth;
         var optionWidth = this.optionWidth;
         var descriptionWidth = this.descriptionWidth;
+        var totalWidth = commandWidth + optionWidth + descriptionWidth + 4;
 
         ColumnFormatter<String> commandFormatter = ColumnFormatter.text(Alignment.CENTER, commandWidth);
         ColumnFormatter<String> optionFormatter = ColumnFormatter.text(Alignment.CENTER, optionWidth);
-        ColumnFormatter<String> descriptionFormatter = ColumnFormatter.text(Alignment.CENTER, descriptionWidth);
+        ColumnFormatter<String> descriptionFormatter = ColumnFormatter.text(Alignment.LEFT, descriptionWidth);
 
         var commandList = new ArrayList<String>();
         var optionList = new ArrayList<String>();
         var descriptionList = new ArrayList<String>();
 
         commandList.add(ScreenPrinter.lineBreak(commandWidth));
-        optionList.add(ScreenPrinter.lineBreak(commandWidth));
-        descriptionList.add(ScreenPrinter.lineBreak(commandWidth));
+        optionList.add(ScreenPrinter.lineBreak(optionWidth));
+        descriptionList.add(ScreenPrinter.lineBreak(descriptionWidth));
 
-        for (var entry : this.commands.entrySet()) {
-            commandList.add("" + entry.getKey());
-            optionList.add(this.commandDisplayText.get(entry.getValue()));
-            descriptionList.add(this.commandDescriptionText.get(entry.getValue()));
-        }
-
-        commandList.add("" + this.quitCommand);
-        optionList.add(this.quitOption);
-        descriptionList.add(this.quitDescription);
+        generateInnerMenu(commandList, optionList, descriptionList);
 
         commandList.add(ScreenPrinter.lineBreak(commandWidth));
-        optionList.add(ScreenPrinter.lineBreak(commandWidth));
-        descriptionList.add(ScreenPrinter.lineBreak(commandWidth));
+        optionList.add(ScreenPrinter.lineBreak(optionWidth));
+        descriptionList.add(ScreenPrinter.lineBreak(descriptionWidth));
 
         String[] commands = commandList.toArray(new String[0]);
         String[] options = optionList.toArray(new String[0]);
@@ -84,7 +97,14 @@ public abstract class MenuHandler {
         builder.addColumn("Option", options, optionFormatter);
         builder.addColumn("Description", descriptions, descriptionFormatter);
 
-        return builder.build().toString();
+
+
+        return "\n" + ScreenPrinter.spacer(totalWidth / 3) + this.menuName + "\n" + ScreenPrinter.lineBreak(totalWidth) + "\n" + builder.build();
+    }
+
+    public void notImplemented(int input) {
+        System.out.println("Option " + input + " not yet implemented!\n\n");
+        CardBattle.navigation.goToMenu(this);
     }
 
     public void badCommand(String originalPrompt) {
@@ -112,11 +132,18 @@ public abstract class MenuHandler {
         var textFirst = textBeforeFunctionality.getOrDefault(command, true);
         if (textFirst) {
             this.runTextPortion(command);
-            this.runFuncPortion(command);
+            this.runFuncPortion(command, input);
         } else {
-            this.runFuncPortion(command);
+            this.runFuncPortion(command, input);
             this.runTextPortion(command);
         }
+    }
+
+    public void autoQuitSetup() {
+        this.commands.put(this.quitCommand, MenuCommand.GO_BACK);
+        this.commandText.put(MenuCommand.GO_BACK, "");
+        this.commandDisplayText.put(MenuCommand.GO_BACK, this.quitOption);
+        this.commandDescriptionText.put(MenuCommand.GO_BACK, this.quitDescription);
     }
 
     private void runTextPortion(MenuCommand command) {
@@ -124,8 +151,8 @@ public abstract class MenuHandler {
         System.out.println(prompt);
     }
 
-    private void runFuncPortion(MenuCommand command) {
-        var func = commandFunctions.getOrDefault(command, () -> {});
-        func.runCommand();
+    private void runFuncPortion(MenuCommand command, int input) {
+        var func = commandFunctions.getOrDefault(command, (unused) -> {});
+        func.runCommand(input);
     }
 }
