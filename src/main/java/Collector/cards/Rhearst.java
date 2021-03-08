@@ -16,19 +16,8 @@ public class Rhearst extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Rhearst(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         enemyCard.getOwner().increaseDefenseBonus(-this.getMagic());
-    }
-
-    @Override
-    public Rhearst copy() {
-        return new Rhearst(this.getName(), this.getAttack(), this.getDefend());
     }
 }

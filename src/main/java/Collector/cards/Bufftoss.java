@@ -13,11 +13,6 @@ public class Bufftoss extends CollectorCard {
         this.text = cardText;
     }
 
-    public Bufftoss(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-    }
-
     @Override
     public void onDrawn(Player enemy) {
         var deckSize = this.getOwner().getDeck().size();
@@ -33,10 +28,5 @@ public class Bufftoss extends CollectorCard {
             return;
         }
         System.out.println(this.getOwner().getName() + "'s " + this.getName() + " had it's ATK increased by " + inc);
-    }
-
-    @Override
-    public Bufftoss copy() {
-        return new Bufftoss(this.getName(), this.getAttack(), this.getDefend());
     }
 }

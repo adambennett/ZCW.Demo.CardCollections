@@ -12,6 +12,9 @@ public class CollectorCard extends AbstractCard {
     public CollectorCard copy() {
         var copy = new CollectorCard(this.getName(), this.getAttack(), this.getDefend());
         copy.setOwner(this.getOwner());
+        copy.setMagic(this.magic);
+        copy.setText(this.text);
+        copy.isExhaust = this.isExhaust;
         return copy;
     }
 }

@@ -29,11 +29,4 @@ public class Spimoky extends CollectorCard {
     public void afterCombat(AbstractCard enemyCard) {
         System.out.print("\n" + this.getOwner().getName() + "'s " + this.getName() + " rolled stats: " + this.getAttack() + " / " + this.getDefend());
     }
-
-    @Override
-    public Spimoky copy() {
-        var spimokyCopy = new Spimoky();
-        spimokyCopy.setOwner(this.getOwner());
-        return spimokyCopy;
-    }
 }

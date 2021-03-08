@@ -13,19 +13,8 @@ public class Tokan extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Tokan(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onDrawn(Player enemy) {
         this.getOwner().increaseMaxHP(this.getMagic());
-    }
-
-    @Override
-    public Tokan copy() {
-        return new Tokan(this.getName(), this.getAttack(), this.getDefend());
     }
 }

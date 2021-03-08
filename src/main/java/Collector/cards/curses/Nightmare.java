@@ -28,6 +28,11 @@ public class Nightmare extends Curse {
 
     @Override
     public Nightmare copy() {
-        return new Nightmare(this.getName(), this.getAttack(), this.getDefend());
+        var copy = new Nightmare(this.getName(), this.getAttack(), this.getDefend());
+        copy.setOwner(this.getOwner());
+        copy.setMagic(this.getMagic());
+        copy.isExhaust = this.isExhaust;
+        copy.setText(this.getText());
+        return copy;
     }
 }

@@ -14,21 +14,10 @@ public class Seplew extends CollectorCard implements Unique {
         this.magic = baseMagic;
     }
 
-    public Seplew(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onDrawn(Player enemy) {
         for (var i = 0; i < this.getMagic(); i++) {
             this.getOwner().getDeck().add(CardArchive.randomCard(), true, false);
         }
-    }
-
-    @Override
-    public Seplew copy() {
-        return new Seplew(this.getName(), this.getAttack(), this.getDefend());
     }
 }

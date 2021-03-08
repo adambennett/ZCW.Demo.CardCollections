@@ -14,22 +14,11 @@ public class Jeqlew extends CollectorCard implements Unique {
         this.magic = baseMagic;
     }
 
-    public Jeqlew(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onDrawn(Player enemy) {
         var hasCard = this.getOwner().getDeck().isInDeck("Keplew") || this.getOwner().getDeck().isInDeck("Seplew");
         if (!hasCard) return;
 
         this.getOwner().increasePermAttackBonus(this.getMagic());
-    }
-
-    @Override
-    public Jeqlew copy() {
-        return new Jeqlew(this.getName(), this.getAttack(), this.getDefend());
     }
 }

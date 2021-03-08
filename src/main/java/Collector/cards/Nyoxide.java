@@ -15,21 +15,10 @@ public class Nyoxide extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Nyoxide(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         for (var c : getOwner().getDeck()) {
             c.setMagic(c.getMagic() + this.getMagic());
         }
-    }
-
-    @Override
-    public Nyoxide copy() {
-        return new Nyoxide(this.getName(), this.getAttack(), this.getDefend());
     }
 }

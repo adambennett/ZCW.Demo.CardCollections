@@ -16,11 +16,6 @@ public class Whennest extends CollectorCard {
         this.text = cardText;
     }
 
-    public Whennest(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-    }
-
     @Override
     public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         if (playerMove == CombatMove.ATTACK) {
@@ -38,10 +33,5 @@ public class Whennest extends CollectorCard {
             this.setAttack(this.resetAttack);
             this.resetAttack = null;
         }
-    }
-
-    @Override
-    public Whennest copy() {
-        return new Whennest(this.getName(), this.getAttack(), this.getDefend());
     }
 }

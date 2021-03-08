@@ -33,6 +33,11 @@ public class Malice extends Curse {
 
     @Override
     public Malice copy() {
-        return new Malice(this.getName(), this.getAttack(), this.getDefend());
+        var copy = new Malice(this.getName(), this.getAttack(), this.getDefend());
+        copy.setOwner(this.getOwner());
+        copy.setMagic(this.getMagic());
+        copy.isExhaust = this.isExhaust;
+        copy.setText(this.getText());
+        return copy;
     }
 }

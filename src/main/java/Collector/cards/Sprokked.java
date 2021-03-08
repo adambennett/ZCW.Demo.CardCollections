@@ -14,19 +14,8 @@ public class Sprokked extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Sprokked(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void afterCombat(AbstractCard enemyCard) {
         this.getOwner().damage(this.getMagic(), this.getOwner());
-    }
-
-    @Override
-    public Sprokked copy() {
-        return new Sprokked(this.getName(), this.getAttack(), this.getDefend());
     }
 }

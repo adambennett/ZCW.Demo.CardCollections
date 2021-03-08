@@ -13,18 +13,8 @@ public class Keflew extends CollectorCard implements Unique {
         this.text = cardText;
     }
 
-    public Keflew(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-    }
-
     @Override
     public void afterCombat(AbstractCard enemyCard) {
         this.setAttack(this.getAttack() - 2);
-    }
-
-    @Override
-    public Keflew copy() {
-        return new Keflew(this.getName(), this.getAttack(), this.getDefend());
     }
 }

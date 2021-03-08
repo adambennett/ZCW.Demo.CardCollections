@@ -89,6 +89,10 @@ public class DeckContents {
         if (shuffleAll) {
             List<AbstractCard> newOrder = new ArrayList<>();
             while (this.orderedCards.size() > 0) {
+                if (this.orderedCards.size() == 1) {
+                    newOrder.add(orderedCards.remove(0));
+                    continue;
+                }
                 newOrder.add(orderedCards.remove(ThreadLocalRandom.current().nextInt(orderedCards.size() - 1)));
             }
             this.orderedCards.addAll(newOrder);
@@ -110,6 +114,7 @@ public class DeckContents {
 
     public Integer randomIndex() {
         if (this.deckSize == 0 || this.orderedCards.size() < 1) return -1;
+        if (this.deckSize == 1 || this.orderedCards.size() == 1) return 0;
         return ThreadLocalRandom.current().nextInt(this.orderedCards.size() - 1);
     }
 

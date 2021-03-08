@@ -13,20 +13,10 @@ public class Ventora extends CollectorCard {
         this.text = cardText;
     }
 
-    public Ventora(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-    }
-
     @Override
     public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         if (playerMove == CombatMove.ATTACK) {
             this.getOwner().setCurrentHP(this.getOwner().getMaxHP() / 2);
         }
-    }
-
-    @Override
-    public Ventora copy() {
-        return new Ventora(this.getName(), this.getAttack(), this.getDefend());
     }
 }

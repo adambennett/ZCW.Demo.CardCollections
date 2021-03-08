@@ -14,19 +14,8 @@ public class Renvar extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Renvar(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void afterCombat(AbstractCard enemyCard) {
         enemyCard.getOwner().damage(this.getMagic(), this.getOwner());
-    }
-
-    @Override
-    public Renvar copy() {
-        return new Renvar(this.getName(), this.getAttack(), this.getDefend());
     }
 }

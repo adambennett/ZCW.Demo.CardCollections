@@ -16,12 +16,6 @@ public class Xiloowt extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Xiloowt(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onAttack(AbstractCard enemyCard) {
         this.getOwner().heal(this.getMagic());
@@ -34,10 +28,5 @@ public class Xiloowt extends CollectorCard {
             list.add(this.copy());
         }
         this.getOwner().getDeck().addAll(list, false, true);
-    }
-
-    @Override
-    public Xiloowt copy() {
-        return new Xiloowt(this.getName(), this.getAttack(), this.getDefend());
     }
 }

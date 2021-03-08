@@ -14,19 +14,8 @@ public class Quilx extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Quilx(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onDefend(AbstractCard enemyCard) {
         this.getOwner().increaseMaxHP(this.getOwner().getDeck().size());
-    }
-
-    @Override
-    public Quilx copy() {
-        return new Quilx(this.getName(), this.getAttack(), this.getDefend());
     }
 }

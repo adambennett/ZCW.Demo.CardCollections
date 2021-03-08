@@ -16,21 +16,10 @@ public class Chilzone extends CollectorCard implements Unique {
         this.magic = baseMagic;
     }
 
-    public Chilzone(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onPlay(AbstractCard enemyCard, CombatMove playerMove) {
         if (playerMove == CombatMove.DEFEND) {
             enemyCard.setDefend(enemyCard.getDefend() - this.getMagic());
         }
-    }
-
-    @Override
-    public Chilzone copy() {
-        return new Chilzone(this.getName(), this.getAttack(), this.getDefend());
     }
 }

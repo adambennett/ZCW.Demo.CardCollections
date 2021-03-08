@@ -11,15 +11,4 @@ public class Halfrot extends CollectorCard {
         this.text = cardText;
         this.isExhaust = true;
     }
-
-    public Halfrot(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.isExhaust = true;
-    }
-
-    @Override
-    public Halfrot copy() {
-        return new Halfrot(this.getName(), this.getAttack(), this.getDefend());
-    }
 }

@@ -13,19 +13,8 @@ public class Healbot extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Healbot(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onDrawn(Player enemy) {
         this.getOwner().heal(this.getMagic());
-    }
-
-    @Override
-    public Healbot copy() {
-        return new Healbot(this.getName(), this.getAttack(), this.getDefend());
     }
 }

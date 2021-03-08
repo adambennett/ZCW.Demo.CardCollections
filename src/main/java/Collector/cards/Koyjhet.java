@@ -14,19 +14,8 @@ public class Koyjhet extends CollectorCard {
         this.magic = baseMagic;
     }
 
-    public Koyjhet(String name, int atk, int def) {
-        super(name, atk, def);
-        this.text = cardText;
-        this.magic = baseMagic;
-    }
-
     @Override
     public void onStalemate(AbstractCard enemyCard) {
         this.getOwner().increasePermAttackBonus(this.getMagic());
-    }
-
-    @Override
-    public Koyjhet copy() {
-        return new Koyjhet(this.getName(), this.getAttack(), this.getDefend());
     }
 }
