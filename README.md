@@ -19,7 +19,7 @@ When one player has no HP remaining, the battle is over!
 
 #### Windows
 - Move into the root directory of the project
-- Run the command: `"<path to Java16>\bin\jpackage.exe" --name CardCollector --input target --main-jar CardCollector-1.0.0-jar-with-dependencies.jar --main-class Collector.CardBattle --win-console`
+- Run the command: `"<path to Java16>\bin\jpackage.exe" --name "Card Collector" --input target --main-jar CardCollector-1.0.0-jar-with-dependencies.jar --main-class Collector.CardBattle --win-console`
 - After a short period of time, `jpackage` will output an executable called `CardCollector-1.0.exe` in the root directory
 - This file is a windows installer for the program, which will generate an executable called `CardCollector.exe`
 - The installed executable can be run directly to execute the program on `Windows` machines
