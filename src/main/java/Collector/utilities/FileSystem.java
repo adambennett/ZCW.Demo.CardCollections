@@ -3,7 +3,7 @@ package Collector.utilities;
 public class FileSystem {
 
     public static String getResourcesPath() {
-        return System.getProperty("user.dir") + fileSep() + "src" + fileSep() + "main" + fileSep() +"resources" + fileSep();
+        return System.getProperty("user.dir") + fileSep();
     }
 
     public static String fileSep() {

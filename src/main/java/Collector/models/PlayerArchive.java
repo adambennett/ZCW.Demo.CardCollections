@@ -38,7 +38,12 @@ public class PlayerArchive {
                 archive.add(p.rebuild());
             }
         } catch (Exception ex) {
-            System.out.println("Error loading progress! Error: " + ex);
+            try {
+                File yourFile = new File(path);
+                yourFile.createNewFile();
+            } catch (Exception ex2) {
+                System.out.println("Error loading progress! Error: " + ex2);
+            }
         }
         for (var c : archive) {
             archived.put(c.getName(), c);
