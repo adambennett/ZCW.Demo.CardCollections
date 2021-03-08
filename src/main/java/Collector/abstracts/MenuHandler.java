@@ -26,8 +26,8 @@ public abstract class MenuHandler {
 
     public MenuHandler() {
         commandWidth = 10;
-        optionWidth = 30;
-        descriptionWidth = 60;
+        optionWidth = 20;
+        descriptionWidth = 40;
 
         quitCommand = 0;
         quitOption = "Quit";
@@ -53,7 +53,7 @@ public abstract class MenuHandler {
     protected void generateInnerMenu(List<String> commandList, List<String> optionList, List<String> descriptionList) {
         for (var entry : this.commands.entrySet()) {
             commandList.add("" + entry.getKey());
-            optionList.add(this.commandDisplayText.get(entry.getValue()));
+            optionList.add(descSpacer() + this.commandDisplayText.get(entry.getValue()));
             descriptionList.add(descSpacer() + this.commandDescriptionText.get(entry.getValue()));
         }
         var quitCommand = commandList.remove(1);
@@ -64,14 +64,30 @@ public abstract class MenuHandler {
         descriptionList.add(quitDesc);
     }
 
+    private Integer getDescWidth() {
+        var highest = 0;
+        for (var desc : this.commandDescriptionText.entrySet()) {
+            highest = Math.max(desc.getValue().length(), highest);
+        }
+        return Math.max(this.descriptionWidth, highest + 10);
+    }
+
+    private Integer getOptionWidth() {
+        var highest = 0;
+        for (var desc : this.commandDisplayText.entrySet()) {
+            highest = Math.max(desc.getValue().length(), highest);
+        }
+        return Math.max(this.optionWidth, highest + 10);
+    }
+
     public String printMenu() {
         var commandWidth = this.commandWidth;
-        var optionWidth = this.optionWidth;
-        var descriptionWidth = this.descriptionWidth;
+        var optionWidth = getOptionWidth();
+        var descriptionWidth = getDescWidth();
         var totalWidth = commandWidth + optionWidth + descriptionWidth + 4;
 
         ColumnFormatter<String> commandFormatter = ColumnFormatter.text(Alignment.CENTER, commandWidth);
-        ColumnFormatter<String> optionFormatter = ColumnFormatter.text(Alignment.CENTER, optionWidth);
+        ColumnFormatter<String> optionFormatter = ColumnFormatter.text(Alignment.LEFT, optionWidth);
         ColumnFormatter<String> descriptionFormatter = ColumnFormatter.text(Alignment.LEFT, descriptionWidth);
 
         var commandList = new ArrayList<String>();
@@ -108,7 +124,9 @@ public abstract class MenuHandler {
     }
 
     public void badCommand(String originalPrompt) {
-        System.out.println("Bad input!\n");
+        if (!CardBattle.gameIsStarted) {
+            System.out.println("Bad input!\n");
+        }
         var command = ScreenPrinter.getStringInput(originalPrompt);
         try {
             var intCommand = Integer.parseInt(command);

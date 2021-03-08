@@ -8,6 +8,8 @@ public class SerializablePlayer {
 
     public String name;
     public Integer hp;
+    public Integer wins;
+    public Integer losses;
     public Map<String, Integer> cards;
 
     public SerializablePlayer() {}
@@ -16,6 +18,8 @@ public class SerializablePlayer {
         this.name = serialize.getName();
         this.hp = serialize.getMaxHP();
         this.cards = new HashMap<>();
+        this.wins = serialize.getWins();
+        this.losses = serialize.getLosses();
         for (var c : serialize.getDeck().getList()) {
             if (this.cards.containsKey(c.getName())) {
                 this.cards.put(c.getName(), this.cards.get(c.getName()) + 1);
@@ -37,6 +41,8 @@ public class SerializablePlayer {
             }
         }
         player.setDeck(new Deck(this.name + "'s Deck", cards, -1));
+        player.setWins(this.wins);
+        player.setLosses(this.losses);
         return player;
     }
 }

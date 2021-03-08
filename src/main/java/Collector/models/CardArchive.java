@@ -2,6 +2,7 @@ package Collector.models;
 
 import Collector.abstracts.*;
 import Collector.cards.*;
+import Collector.cards.curses.*;
 import Collector.io.*;
 import io.bretty.console.table.*;
 
@@ -168,6 +169,9 @@ public class CardArchive {
         archive.add(new Whennest());
         archive.add(new Xiloowt());
         archive.add(new Yasdarv());
+
+        curses.add(new Nightmare());
+        curses.add(new Malice());
 
         for (var c : archive) {
             archived.put(c.getName(), c);

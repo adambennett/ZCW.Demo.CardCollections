@@ -3,7 +3,6 @@ package Collector.io;
 import Collector.*;
 import Collector.abstracts.*;
 import Collector.enums.*;
-import Collector.logic.*;
 import Collector.models.*;
 
 public class MainMenu extends MenuHandler {
@@ -21,37 +20,45 @@ public class MainMenu extends MenuHandler {
         this.player = player;
         this.menuName = "Main Menu - " + this.player.getName();
 
-        this.commands.put(1, MenuCommand.START_COMBAT);
-        this.commands.put(2, MenuCommand.START_BRAWL);
-        this.commands.put(3, MenuCommand.EDIT_DECK);
-        this.commands.put(4, MenuCommand.CHANGE_HP);
-        this.commands.put(5, MenuCommand.CHANGE_NAME);
-        this.commands.put(6, MenuCommand.CARD_LIBRARY);
+        this.commands.put(1, MenuCommand.LOCAL_GAME);
+        this.commands.put(2, MenuCommand.LOCAL_BRAWL);
+        this.commands.put(3, MenuCommand.PLAY_ONLINE);
+        this.commands.put(4, MenuCommand.EDIT_LOCAL_DECK);
+        this.commands.put(5, MenuCommand.CHANGE_HP);
+        this.commands.put(6, MenuCommand.CHANGE_NAME);
+        this.commands.put(7, MenuCommand.CARD_LIBRARY);
+        this.commands.put(8, MenuCommand.KEYWORDS);
         this.commands.put(9, MenuCommand.DELETE_PLAYER);
 
-        this.commandText.put(MenuCommand.START_COMBAT, "");
-        this.commandText.put(MenuCommand.START_BRAWL, "");
-        this.commandText.put(MenuCommand.EDIT_DECK, "");
+        this.commandText.put(MenuCommand.LOCAL_GAME, "");
+        this.commandText.put(MenuCommand.LOCAL_BRAWL, "");
+        this.commandText.put(MenuCommand.PLAY_ONLINE, "");
+        this.commandText.put(MenuCommand.EDIT_LOCAL_DECK, "");
         this.commandText.put(MenuCommand.CHANGE_HP, "");
         this.commandText.put(MenuCommand.CHANGE_NAME, "");
         this.commandText.put(MenuCommand.CARD_LIBRARY, "");
+        this.commandText.put(MenuCommand.KEYWORDS, "");
         this.commandText.put(MenuCommand.DELETE_PLAYER, "");
 
-        this.commandDisplayText.put(MenuCommand.START_COMBAT, "Start Battle");
-        this.commandDisplayText.put(MenuCommand.START_BRAWL, "Start Brawl");
-        this.commandDisplayText.put(MenuCommand.EDIT_DECK, "Edit Deck");
+        this.commandDisplayText.put(MenuCommand.LOCAL_GAME, "Local Battle");
+        this.commandDisplayText.put(MenuCommand.LOCAL_BRAWL, "Local Brawl");
+        this.commandDisplayText.put(MenuCommand.PLAY_ONLINE, "Play Online");
+        this.commandDisplayText.put(MenuCommand.EDIT_LOCAL_DECK, "Edit Local Deck");
         this.commandDisplayText.put(MenuCommand.CHANGE_HP, "Change Starting HP");
         this.commandDisplayText.put(MenuCommand.CHANGE_NAME, "Change Name");
         this.commandDisplayText.put(MenuCommand.CARD_LIBRARY, "Card Library");
-        this.commandDisplayText.put(MenuCommand.DELETE_PLAYER, "Delete Player");
+        this.commandDisplayText.put(MenuCommand.KEYWORDS, "Keyword Glossary");
+        this.commandDisplayText.put(MenuCommand.DELETE_PLAYER, "Delete Account");
 
-        this.commandDescriptionText.put(MenuCommand.START_COMBAT, "Start a standard battle against a random enemy");
-        this.commandDescriptionText.put(MenuCommand.START_BRAWL, "Choose a special battle to start against a random enemy");
-        this.commandDescriptionText.put(MenuCommand.EDIT_DECK, "Modify the contents of your deck");
+        this.commandDescriptionText.put(MenuCommand.LOCAL_GAME, "Start a standard battle against a random enemy");
+        this.commandDescriptionText.put(MenuCommand.LOCAL_BRAWL, "Choose a special battle to start against a random enemy");
+        this.commandDescriptionText.put(MenuCommand.PLAY_ONLINE, "Connect to the CardCollector online service to host and join networked games");
+        this.commandDescriptionText.put(MenuCommand.EDIT_LOCAL_DECK, "Modify the contents of your deck");
         this.commandDescriptionText.put(MenuCommand.CHANGE_HP, "Modify starting battle HP");
         this.commandDescriptionText.put(MenuCommand.CHANGE_NAME, "Change your player name");
         this.commandDescriptionText.put(MenuCommand.CARD_LIBRARY, "View the entire list of cards");
-        this.commandDescriptionText.put(MenuCommand.DELETE_PLAYER, "Delete this player");
+        this.commandDescriptionText.put(MenuCommand.KEYWORDS, "View a list of all keywords and definitions of terms that appear on cards");
+        this.commandDescriptionText.put(MenuCommand.DELETE_PLAYER, "Delete your account");
 
         this.commandFunctions.put(MenuCommand.GO_BACK, (unused) -> {
             if (PlayerArchive.save()) {
@@ -59,11 +66,13 @@ public class MainMenu extends MenuHandler {
             }
             CardBattle.navigation.initializeMenus();
         });
-        this.commandFunctions.put(MenuCommand.START_COMBAT, (unused) -> Game.startGame(this.player));
+        this.commandFunctions.put(MenuCommand.LOCAL_GAME, (unused) -> Game.startGame(this.player));
 
-        this.commandFunctions.put(MenuCommand.START_BRAWL, this::notImplemented);
+        this.commandFunctions.put(MenuCommand.LOCAL_BRAWL, this::notImplemented);
 
-        this.commandFunctions.put(MenuCommand.EDIT_DECK, this::notImplemented);
+        this.commandFunctions.put(MenuCommand.PLAY_ONLINE, this::notImplemented);
+
+        this.commandFunctions.put(MenuCommand.EDIT_LOCAL_DECK, this::notImplemented);
 
         this.commandFunctions.put(MenuCommand.CHANGE_HP, (unused) -> {
             var input = ScreenPrinter.getStringInput("What would you like to change your starting HP to?");
@@ -96,6 +105,8 @@ public class MainMenu extends MenuHandler {
             ScreenPrinter.getStringInput("\n\nPress any key to return to the Main Menu\n");
             CardBattle.navigation.loadMenu();
         });
+
+        this.commandFunctions.put(MenuCommand.KEYWORDS, this::notImplemented);
 
         this.commandFunctions.put(MenuCommand.DELETE_PLAYER, (unused) -> {
             var input = ScreenPrinter.getStringInput("Are you sure you want to delete this player? This cannot be undone. Enter the player name exactly to confirm deletion: \n");

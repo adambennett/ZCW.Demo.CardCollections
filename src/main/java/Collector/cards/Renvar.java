@@ -22,7 +22,7 @@ public class Renvar extends CollectorCard {
 
     @Override
     public void afterCombat(AbstractCard enemyCard) {
-        enemyCard.getOwner().damage(this.getMagic());
+        enemyCard.getOwner().damage(this.getMagic(), this.getOwner());
     }
 
     @Override

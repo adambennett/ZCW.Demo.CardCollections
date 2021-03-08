@@ -1,26 +1,52 @@
-package Collector.logic;
+package Collector.models;
 
 import Collector.*;
 import Collector.enums.*;
 import Collector.interfaces.*;
 import Collector.io.*;
-import Collector.models.*;
 
 public class Game {
 
+    private record CombatResults(CombatResult result, String text) {}
+
     private Player human;
     private ComputerEnemy computer;
+    private Integer turn;
+    private Integer stalemates;
+    private Integer viciousCombats;
 
     public static void startGame(Player player) {
+        CardBattle.gameIsStarted = true;
         CardBattle.currentGame = new Game();
-        CardBattle.currentGame.setupPlayers(player).playGame().finishGame();
+        CardBattle.currentGame.setup(player).playGame().finishGame();
+        CardBattle.gameIsStarted = false;
+        CardBattle.currentGame.getHuman().resetAfterCombat();
         CardBattle.navigation.loadMenu();
     }
 
-    private Game setupPlayers(Player player) {
+    private Game setup(Player player) {
         this.human = player;
-        this.computer = new ComputerEnemy("Kris Younger", player.getMaxHP(), player.getDeck().size());
+        this.computer = new ComputerEnemy(getEnemyName(), player.getMaxHP(), player.getDeck().size());
+        this.turn = 0;
+        this.stalemates = 0;
+        this.viciousCombats = 0;
         return this;
+    }
+
+    private String getEnemyName() {
+        if (this.human.getWins() > 99) {
+            return "Seto Kaiba";
+        }
+        if (this.human.getWins() > 49) {
+            return "Mark Bennett";
+        }
+        if (this.human.getWins() > 9) {
+            return "Leon Hunter";
+        }
+        if (this.human.getWins() > 4) {
+            return "Chris Nobles";
+        }
+        return "Kris Younger";
     }
 
     private Game playGame() {
@@ -64,10 +90,23 @@ public class Game {
             // Combat Step
             var results = Game.calculateCombat(playerMove, enemyMove, this.human, this.computer, false);
 
+            // Update battle stats
+            this.turn++;
+            this.human.getStats().hasAttacked = playerMove == CombatMove.ATTACK || this.human.getStats().hasAttacked;
+            this.human.getStats().hasDefended = playerMove == CombatMove.DEFEND || this.human.getStats().hasDefended;
+            this.computer.getStats().hasAttacked = enemyMove == CombatMove.ATTACK || this.computer.getStats().hasAttacked;
+            this.computer.getStats().hasDefended = enemyMove == CombatMove.DEFEND || this.computer.getStats().hasDefended;
+            this.human.getStats().turnsSurvived++;
+            this.computer.getStats().turnsSurvived++;
+            switch (results.result()) {
+                case STALEMATE -> this.stalemates++;
+                case VICIOUS -> this.viciousCombats++;
+            }
+
             // afterCombat() hooks and show summary
             this.human.getCurrentCard().afterCombat(this.computer.getCurrentCard());
             this.computer.getCurrentCard().afterCombat(this.human.getCurrentCard());
-            ScreenPrinter.combatSummary(results, this);
+            ScreenPrinter.combatSummary(results.text(), this);
         }
         return this;
     }
@@ -80,18 +119,19 @@ public class Game {
         ScreenPrinter.gameOver(this.human.getCurrentHP() > this.computer.getCurrentHP());
     }
 
-    public static String calculateCombat(CombatMove playerMove, CombatMove enemyMove, Player human, ComputerEnemy computer, boolean simulated) {
+    public static CombatResults calculateCombat(CombatMove playerMove, CombatMove enemyMove, Player human, ComputerEnemy computer, boolean simulated) {
         var playerCard = human.getCurrentCard();
         var enemyCard = computer.getCurrentCard();
         String results;
+        CombatResult result = null;
 
         // BOTH ATTACK
         if (playerMove == CombatMove.ATTACK && enemyMove == CombatMove.ATTACK) {
             if (playerCard.getAttack() > enemyCard.getAttack()) {
-                computer.damage(human.getFullDamage());
+                computer.damage(human.getFullDamage(), human);
                 results = "Vicious combat! Enemy took " + human.getFullDamage() + " damage.";
             } else if (playerCard.getAttack() < enemyCard.getAttack()) {
-                human.damage(computer.getFullDamage());
+                human.damage(computer.getFullDamage(), computer);
                 results = "Vicious combat! You took " + computer.getFullDamage() + " damage.";
             } else {
                 results = "Both players attacked, but nothing happened.";
@@ -101,6 +141,7 @@ public class Game {
                 enemyCard.onViciousCombat(playerCard);
                 playerCard.onAttack(enemyCard);
                 playerCard.onViciousCombat(enemyCard);
+                result = CombatResult.VICIOUS;
             }
         }
 
@@ -113,21 +154,17 @@ public class Game {
                 playerCard.onStalemate(enemyCard);
                 enemyCard.onDefend(playerCard);
                 enemyCard.onStalemate(playerCard);
+                result = CombatResult.STALEMATE;
             }
             results = "Stalemate - both players healed.";
         }
 
         // PLAYER ATTACK - COMPUTER DEFEND
         else if (playerMove == CombatMove.ATTACK) {
-            // Java 15 and below
-            //boolean enemyAutoWins = enemyCard instanceof Defender && ((Defender)enemyCard).autoWinCombat(playerCard);
-
-            // Java 16+
             boolean enemyAutoWins = enemyCard instanceof Defender defCard && defCard.autoWinCombat(playerCard);
-
             if (human.getFullDamage() > computer.getFullDefense() && !enemyAutoWins) {
                 var dmg = human.getFullDamage() - computer.getFullDefense();
-                computer.damage(dmg);
+                computer.damage(dmg, human);
                 results = "Enemy took " + dmg + " damage.";
             } else {
                 results = "The enemy defended your attack!";
@@ -135,20 +172,16 @@ public class Game {
             if (!simulated) {
                 playerCard.onAttack(enemyCard);
                 enemyCard.onDefend(playerCard);
+                result = CombatResult.COMBAT;
             }
         }
 
         // PLAYER DEFEND - COMPUTER ATTACK
         else if (playerMove == CombatMove.DEFEND) {
-            // Java 15 and below
-            //boolean playerAutoWins = playerCard instanceof Defender && ((Defender)playerCard).autoWinCombat(enemyCard);
-
-            // Java 16+
             boolean playerAutoWins = playerCard instanceof Defender defCard && defCard.autoWinCombat(enemyCard);
-
             if (computer.getFullDamage() > human.getFullDefense() && !playerAutoWins) {
                 var dmg = computer.getFullDamage() - human.getFullDefense();
-                human.damage(dmg);
+                human.damage(dmg, computer);
                 results =  "You took " + dmg + " damage.";
             } else {
                 results = "You defended the enemy attack!";
@@ -156,12 +189,33 @@ public class Game {
             if (!simulated) {
                 playerCard.onDefend(enemyCard);
                 enemyCard.onAttack(playerCard);
+                result = CombatResult.COMBAT;
             }
         } else {
             results = "Something unknown occurred?";
         }
 
         // return summary for ScreenPrinter
-        return results;
+        return new CombatResults(result, results);
+    }
+
+    public Player getHuman() {
+        return human;
+    }
+
+    public ComputerEnemy getComputer() {
+        return computer;
+    }
+
+    public Integer getTurn() {
+        return turn;
+    }
+
+    public Integer getStalemates() {
+        return stalemates;
+    }
+
+    public Integer getViciousCombats() {
+        return viciousCombats;
     }
 }

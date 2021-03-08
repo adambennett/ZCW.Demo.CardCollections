@@ -1,11 +1,12 @@
 package Collector.abstracts;
 
 import Collector.enums.*;
+import Collector.interfaces.*;
 import Collector.models.*;
 
 import java.util.*;
 
-public abstract class AbstractCard {
+public abstract class AbstractCard implements DamageSource {
 
     private final UUID id;
     protected final String name;
@@ -26,18 +27,6 @@ public abstract class AbstractCard {
         this.isExhaust = false;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getAttack() {
-        return attack;
-    }
-
     public Integer getDefend() {
         return defend.orElse(0);
     }
@@ -53,6 +42,29 @@ public abstract class AbstractCard {
                    .replaceAll("!D!", "" + this.getDefend());
     }
 
+    public void setAttack(Integer attack) {
+        this.attack = attack;
+        if (this.attack < 0) {
+            this.attack = 0;
+        }
+    }
+
+    public void setDefend(Integer defend) {
+        this.defend = defend != null ? Optional.of(defend) : Optional.empty();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getAttack() {
+        return attack;
+    }
+
     public Player getOwner() {
         return owner;
     }
@@ -63,17 +75,6 @@ public abstract class AbstractCard {
 
     public Boolean isExhaust() {
         return isExhaust;
-    }
-
-    public void setAttack(Integer attack) {
-        this.attack = attack;
-        if (this.attack < 0) {
-            this.attack = 0;
-        }
-    }
-
-    public void setDefend(Integer defend) {
-        this.defend = defend != null ? Optional.of(defend) : Optional.empty();
     }
 
     public void setText(String text) { this.text = text; }

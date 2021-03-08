@@ -47,12 +47,12 @@ public class LoadPlayerMenu extends MenuHandler {
             var player = this.players.getOrDefault(entry.getKey(), null);
             if (player == null) continue;
             commandList.add("" + entry.getKey());
-            optionList.add(player.getName());
-            descriptionList.add(descSpacer() + player.getMaxHP() + "HP, " + player.getDeck().size() + " cards");
+            optionList.add(descSpacer() + player.getName());
+            descriptionList.add(descSpacer() + player.getMaxHP() + "HP, " + player.getDeck().size() + " cards, " + player.getWins() + "W - " + player.getLosses() + "L");
         }
 
         commandList.add("" + this.quitCommand);
-        optionList.add(this.quitOption);
+        optionList.add(descSpacer() + this.quitOption);
         descriptionList.add(descSpacer() + this.quitDescription);
     }
 }

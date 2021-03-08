@@ -22,7 +22,7 @@ public class Sprokked extends CollectorCard {
 
     @Override
     public void afterCombat(AbstractCard enemyCard) {
-        this.getOwner().damage(this.getMagic());
+        this.getOwner().damage(this.getMagic(), this.getOwner());
     }
 
     @Override

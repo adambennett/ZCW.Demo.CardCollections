@@ -1,8 +1,8 @@
 package Collector.io;
 
+import Collector.*;
 import Collector.abstracts.*;
 import Collector.enums.*;
-import Collector.logic.*;
 import Collector.models.*;
 import io.bretty.console.table.*;
 
@@ -13,8 +13,10 @@ public class ScreenPrinter {
     public static void gameOver(boolean win) {
         if (win) {
             System.out.println("\n\nGame over!\n\nYou win!!");
+            CardBattle.currentGame.getHuman().win();
         } else {
             System.out.println("\n\nGame over!\n\nYou lost. Try again next time.");
+            CardBattle.currentGame.getHuman().lose();
         }
     }
 
@@ -107,41 +109,67 @@ public class ScreenPrinter {
     // Initial menu
         // Load Player
         // New Player
+        // Quit/Exit
 
     // Load Player menu
-        // list all players with numbers, accept number input for loading or a go back num
+        // list all players with commands -> Main Menu
+        // Go back
 
     // New Player 'menu'
         // what is your name?
         // how much starting HP do you have?
-        // create player and load automatically
+        // create player and load automatically -> Main Menu
 
     // Main menu
-        // start game (or continue game)
-        // edit deck
-        // change starting hp
-        // change name
-        // card library
-        // delete player
+        // Local Game
+        // Local Brawl
+        // Play Online
+        // Edit Local Deck
+        // Change Starting HP
+        // Change Name
+        // Card Library
+        // Keyword Glossary
+        // Delete Account
 
-    // Deck Modification Menu
-        // Add Cards
-        // Remove Cards
+        // Local Brawl Menu
+            // All Spimoky
+            // Random Starting HP
+            // Random Deck
+            // Cursed Decks
+            // Seplew Bonanza
+            // Nyoxide's Nightmare
 
-    // Add Cards Menu
-        // List of all cards with commands
-        // Go back
+        // Online Menu
+            // View Games
+            // Host Game
+            // Edit Online Deck
+            // Go back
 
-    // Remove Cards Menu
-        // List of all cards in deck with commands
-        // Go back
+            // Game Browser
+                // List all available hosted games (pagination?)
+                // Go back
 
-    // Brawl Menu
-        // All Spimoky
-        // Random Starting HP
-        // Random Deck
-        // Cursed Decks
-        // Seplew Bonanza
-        // Nyoxide's Nightmare
+            // Host Game
+                // What should the game be called?
+                // Do you want a password? Y/N
+                    // If yes, set password:
+                // Starting HP
+                // Deck Size Limit
 
+        // Edit Deck -> Deck Modification Menu
+            // Add Cards
+            // Remove Cards
+            // Go back
+
+                // Add Cards Menu
+                    // List of all cards with commands
+                    // Go back
+
+                // Remove Cards Menu
+                    // List of all cards in deck with commands
+                    // Go back
+
+        // Glossary
+            // List all keywords || description
+            // Go back
 }

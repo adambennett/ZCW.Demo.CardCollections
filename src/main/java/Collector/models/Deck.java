@@ -70,8 +70,8 @@ public class Deck implements Iterable<AbstractCard> {
         return true;
     }
 
-    public Boolean remove(AbstractCard card) {
-        return this.contents.remove(card) != null;
+    public AbstractCard remove(AbstractCard card) {
+        return this.contents.remove(card);
     }
 
     @Override

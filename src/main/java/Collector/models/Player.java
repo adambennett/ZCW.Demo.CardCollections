@@ -1,13 +1,12 @@
 package Collector.models;
 
 import Collector.abstracts.*;
-import Collector.cards.*;
 import Collector.interfaces.*;
 import Collector.utilities.*;
 
 import java.util.*;
 
-public class Player {
+public class Player implements DamageSource {
 
     private Integer maxHP;
     private Integer currentHP;
@@ -15,11 +14,14 @@ public class Player {
     private Integer defendBonus;
     private Integer permAttackBonus;
     private Integer permDefendBonus;
+    private Integer wins;
+    private Integer losses;
     private String name;
     private Deck deck;
     private final List<AbstractCard> discard;
     private final List<AbstractCard> exhaust;
     private AbstractCard currentCard;
+    private final BattleStats stats;
 
     public Player(String name, int maxHP, Integer numCards) {
         this.name = name;
@@ -27,8 +29,11 @@ public class Player {
         this.currentHP = maxHP;
         this.attackBonus = 0;
         this.defendBonus = 0;
+        this.wins = 0;
+        this.losses = 0;
         this.permAttackBonus = 0;
         this.permDefendBonus = 0;
+        this.stats = new BattleStats();
         this.discard = new ArrayList<>();
         this.exhaust = new ArrayList<>();
         if (numCards != null) {
@@ -100,6 +105,10 @@ public class Player {
             }
         }
         return cards;
+    }
+
+    public void resetAfterCombat() {
+        this.currentHP = this.maxHP;
     }
 
     /**
@@ -180,8 +189,12 @@ public class Player {
      *
      * @param dmg The amount of damage to deal.
      */
-    public void damage(int dmg) {
-        this.setCurrentHP(this.currentHP - dmg);
+    public void damage(int dmg, DamageSource attacker) {
+        var damaged = this.setCurrentHP(this.currentHP - dmg);
+        this.stats.damageTaken += damaged;
+        if (!attacker.equals(this) && attacker instanceof Player attackingPlayer) {
+            attackingPlayer.stats.damageDealt += damaged;
+        }
     }
 
     /**
@@ -190,7 +203,8 @@ public class Player {
      * @param heal The amount of HP to heal.
      */
     public void heal(int heal) {
-        this.setCurrentHP(this.currentHP + heal);
+        var healed = this.setCurrentHP(this.currentHP + heal);
+        this.stats.amountHealed += healed;
     }
 
     /**
@@ -244,12 +258,17 @@ public class Player {
      *
      * @param currentHP The amount of HP to set the player's current HP to.
      */
-    public void setCurrentHP(Integer currentHP) {
+    public Integer setCurrentHP(Integer currentHP) {
+        var start = this.currentHP;
         this.currentHP = currentHP;
         if (this.currentHP > this.maxHP) {
             this.currentHP = this.maxHP;
         }
+        return this.currentHP - start;
     }
+
+    public void win() { this.wins++; }
+    public void lose() { this.losses++; }
 
     // Plain getters & setters
     public String getName() {
@@ -267,6 +286,15 @@ public class Player {
     public AbstractCard getCurrentCard() {
         return currentCard;
     }
+
+    public Integer getWins() {
+        return wins;
+    }
+
+    public Integer getLosses() {
+        return losses;
+    }
+
     public Integer getAttackBonus() {
         return attackBonus;
     }
@@ -279,8 +307,18 @@ public class Player {
     public Integer getPermDefendBonus() {
         return permDefendBonus;
     }
+    public List<AbstractCard> getExhaust() { return exhaust; }
+    public BattleStats getStats() { return stats; }
     public void setCurrentCard(AbstractCard currentCard) { this.currentCard = currentCard; }
     public void setMaxHP(Integer maxHP) { this.maxHP = maxHP; }
     public void setName(String name) { this.name = name; }
     public void setDeck(Deck deck) { this.deck = deck; }
+
+    public void setWins(Integer wins) {
+        this.wins = wins;
+    }
+
+    public void setLosses(Integer losses) {
+        this.losses = losses;
+    }
 }

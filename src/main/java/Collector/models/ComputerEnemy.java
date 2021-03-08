@@ -2,7 +2,6 @@ package Collector.models;
 
 import Collector.abstracts.*;
 import Collector.enums.*;
-import Collector.logic.*;
 
 import java.util.*;
 

@@ -1,13 +1,13 @@
 package Collector;
 
 import Collector.io.*;
-import Collector.logic.*;
 import Collector.models.*;
 
 public class CardBattle {
 
     public static MenuNavigation navigation;
     public static Game currentGame;
+    public static Boolean gameIsStarted = false;
 
     public static void main(String[] args) {
         navigation = new MenuNavigation();
