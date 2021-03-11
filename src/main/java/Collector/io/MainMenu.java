@@ -17,6 +17,7 @@ public class MainMenu extends MenuHandler {
     }
 
     public void setPlayer(Player player) {
+        CardBattle.mainMenu = this;
         this.player = player;
         this.menuName = "Main Menu - " + this.player.getName();
 
@@ -30,16 +31,6 @@ public class MainMenu extends MenuHandler {
         this.commands.put(8, MenuCommand.KEYWORDS);
         this.commands.put(9, MenuCommand.DELETE_PLAYER);
 
-        this.commandText.put(MenuCommand.LOCAL_GAME, "");
-        this.commandText.put(MenuCommand.LOCAL_BRAWL, "");
-        this.commandText.put(MenuCommand.PLAY_ONLINE, "");
-        this.commandText.put(MenuCommand.EDIT_LOCAL_DECK, "");
-        this.commandText.put(MenuCommand.CHANGE_HP, "");
-        this.commandText.put(MenuCommand.CHANGE_NAME, "");
-        this.commandText.put(MenuCommand.CARD_LIBRARY, "");
-        this.commandText.put(MenuCommand.KEYWORDS, "");
-        this.commandText.put(MenuCommand.DELETE_PLAYER, "");
-
         this.commandDisplayText.put(MenuCommand.LOCAL_GAME, "Local Battle");
         this.commandDisplayText.put(MenuCommand.LOCAL_BRAWL, "Local Brawl");
         this.commandDisplayText.put(MenuCommand.PLAY_ONLINE, "Play Online");
@@ -50,8 +41,8 @@ public class MainMenu extends MenuHandler {
         this.commandDisplayText.put(MenuCommand.KEYWORDS, "Keyword Glossary");
         this.commandDisplayText.put(MenuCommand.DELETE_PLAYER, "Delete Account");
 
-        this.commandDescriptionText.put(MenuCommand.LOCAL_GAME, "Start a standard battle against a random enemy");
-        this.commandDescriptionText.put(MenuCommand.LOCAL_BRAWL, "Choose a special battle to start against a random enemy");
+        this.commandDescriptionText.put(MenuCommand.LOCAL_GAME, "Start a standard battle against " + Game.getEnemyName(player));
+        this.commandDescriptionText.put(MenuCommand.LOCAL_BRAWL, "Choose a special battle to start against " + Game.getEnemyName(player));
         this.commandDescriptionText.put(MenuCommand.PLAY_ONLINE, "Connect to the CardCollector online service to host and join networked games");
         this.commandDescriptionText.put(MenuCommand.EDIT_LOCAL_DECK, "Modify the contents of your deck");
         this.commandDescriptionText.put(MenuCommand.CHANGE_HP, "Modify starting battle HP");
@@ -72,7 +63,11 @@ public class MainMenu extends MenuHandler {
 
         this.commandFunctions.put(MenuCommand.PLAY_ONLINE, this::notImplemented);
 
-        this.commandFunctions.put(MenuCommand.EDIT_LOCAL_DECK, this::notImplemented);
+        this.commandFunctions.put(MenuCommand.EDIT_LOCAL_DECK, (unused) -> {
+            var menu = new DeckModifyMenu();
+            menu.setPlayer(player);
+            CardBattle.navigation.goToMenu(menu);
+        });
 
         this.commandFunctions.put(MenuCommand.CHANGE_HP, (unused) -> {
             var input = ScreenPrinter.getStringInput("What would you like to change your starting HP to?");

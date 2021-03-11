@@ -6,9 +6,7 @@ public class MenuNavigation {
 
     private MenuHandler activeMenu;
 
-    public void initializeMenus() {
-        this.goToMenu(new InitialMenu());
-    }
+    public void initializeMenus() { this.goToMenu(new InitialMenu()); }
 
     public void goToMenu(MenuHandler menu) {
         this.activeMenu = menu;

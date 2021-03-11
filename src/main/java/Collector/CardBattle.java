@@ -8,6 +8,7 @@ public class CardBattle {
     public static MenuNavigation navigation;
     public static Game currentGame;
     public static Boolean gameIsStarted = false;
+    public static MainMenu mainMenu;
 
     public static void main(String[] args) {
         navigation = new MenuNavigation();

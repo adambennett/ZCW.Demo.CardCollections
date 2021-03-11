@@ -4,6 +4,7 @@ import Collector.*;
 import Collector.enums.*;
 import Collector.interfaces.*;
 import Collector.io.*;
+import Collector.utilities.*;
 
 public class Game {
 
@@ -26,27 +27,27 @@ public class Game {
 
     private Game setup(Player player) {
         this.human = player;
-        this.computer = new ComputerEnemy(getEnemyName(), player.getMaxHP(), player.getDeck().size());
+        this.computer = new ComputerEnemy(getEnemyName(player), player.getMaxHP(), player.getDeck().size());
         this.turn = 0;
         this.stalemates = 0;
         this.viciousCombats = 0;
         return this;
     }
 
-    private String getEnemyName() {
-        if (this.human.getWins() > 99) {
-            return "Seto Kaiba";
+    public static String getEnemyName(Player player) {
+        if (player.getWins() > 99) {
+            return Constants.FifthEnemy;
         }
-        if (this.human.getWins() > 49) {
-            return "Mark Bennett";
+        if (player.getWins() > 49) {
+            return Constants.FourthEnemy;
         }
-        if (this.human.getWins() > 9) {
-            return "Leon Hunter";
+        if (player.getWins() > 9) {
+            return Constants.ThirdEnemy;
         }
-        if (this.human.getWins() > 4) {
-            return "Chris Nobles";
+        if (player.getWins() > 4) {
+            return Constants.SecondEnemy;
         }
-        return "Kris Younger";
+        return Constants.FirstEnemy;
     }
 
     private Game playGame() {

@@ -16,6 +16,7 @@ public abstract class MenuHandler {
     protected final Map<MenuCommand, String> commandDescriptionText;
     protected final Map<MenuCommand, MenuFunction> commandFunctions;
     protected final Map<MenuCommand, Boolean> textBeforeFunctionality;
+    protected boolean cardMenu;
     protected String menuName;
     protected String quitOption;
     protected String quitDescription;
@@ -56,49 +57,41 @@ public abstract class MenuHandler {
             optionList.add(descSpacer() + this.commandDisplayText.get(entry.getValue()));
             descriptionList.add(descSpacer() + this.commandDescriptionText.get(entry.getValue()));
         }
-        var quitCommand = commandList.remove(1);
-        var quitOption = optionList.remove(1);
-        var quitDesc = descriptionList.remove(1);
+        var quitCommand = commandList.remove(0);
+        var quitOption = optionList.remove(0);
+        var quitDesc = descriptionList.remove(0);
         commandList.add(quitCommand);
         optionList.add(quitOption);
         descriptionList.add(quitDesc);
     }
 
-    private Integer getDescWidth() {
+    public static Integer getWidth(ArrayList<String> strings, int defaultMax, int padding) {
         var highest = 0;
-        for (var desc : this.commandDescriptionText.entrySet()) {
-            highest = Math.max(desc.getValue().length(), highest);
+        for (var desc : strings) {
+            highest = Math.max(desc.length(), highest);
         }
-        return Math.max(this.descriptionWidth, highest + 10);
-    }
-
-    private Integer getOptionWidth() {
-        var highest = 0;
-        for (var desc : this.commandDisplayText.entrySet()) {
-            highest = Math.max(desc.getValue().length(), highest);
-        }
-        return Math.max(this.optionWidth, highest + 10);
+        return Math.max(defaultMax, highest + padding);
     }
 
     public String printMenu() {
-        var commandWidth = this.commandWidth;
-        var optionWidth = getOptionWidth();
-        var descriptionWidth = getDescWidth();
-        var totalWidth = commandWidth + optionWidth + descriptionWidth + 4;
-
-        ColumnFormatter<String> commandFormatter = ColumnFormatter.text(Alignment.CENTER, commandWidth);
-        ColumnFormatter<String> optionFormatter = ColumnFormatter.text(Alignment.LEFT, optionWidth);
-        ColumnFormatter<String> descriptionFormatter = ColumnFormatter.text(Alignment.LEFT, descriptionWidth);
-
         var commandList = new ArrayList<String>();
         var optionList = new ArrayList<String>();
         var descriptionList = new ArrayList<String>();
 
-        commandList.add(ScreenPrinter.lineBreak(commandWidth));
-        optionList.add(ScreenPrinter.lineBreak(optionWidth));
-        descriptionList.add(ScreenPrinter.lineBreak(descriptionWidth));
-
         generateInnerMenu(commandList, optionList, descriptionList);
+
+        var commandWidth = this.commandWidth;
+        int optionWidth = getWidth(optionList, this.optionWidth, 10);
+        int descriptionWidth = getWidth(descriptionList, this.descriptionWidth, 10);
+
+
+        commandList.add(0, ScreenPrinter.lineBreak(commandWidth));
+        optionList.add(0, ScreenPrinter.lineBreak(optionWidth));
+        descriptionList.add(0, ScreenPrinter.lineBreak(descriptionWidth));
+
+        ColumnFormatter<String> commandFormatter = ColumnFormatter.text(Alignment.CENTER, commandWidth);
+        ColumnFormatter<String> optionFormatter = ColumnFormatter.text(Alignment.LEFT, optionWidth);
+        ColumnFormatter<String> descriptionFormatter = ColumnFormatter.text(Alignment.LEFT, descriptionWidth);
 
         commandList.add(ScreenPrinter.lineBreak(commandWidth));
         optionList.add(ScreenPrinter.lineBreak(optionWidth));
@@ -108,15 +101,21 @@ public abstract class MenuHandler {
         String[] options = optionList.toArray(new String[0]);
         String[] descriptions = descriptionList.toArray(new String[0]);
 
-        Table.Builder builder = new Table.Builder("Command", commands, commandFormatter);
+        var builder = new Table.Builder("Command", commands, commandFormatter);
 
-        builder.addColumn("Option", options, optionFormatter);
-        builder.addColumn("Description", descriptions, descriptionFormatter);
-
-
+        int totalWidth;
+        if (this.cardMenu) {
+            totalWidth = this.generateCardMenu(builder) + commandWidth + 6;
+        } else {
+            totalWidth = commandWidth + optionWidth + descriptionWidth + 4;
+            builder.addColumn("Option", options, optionFormatter);
+            builder.addColumn("Description", descriptions, descriptionFormatter);
+        }
 
         return "\n" + ScreenPrinter.spacer(totalWidth / 3) + this.menuName + "\n" + ScreenPrinter.lineBreak(totalWidth) + "\n" + builder.build();
     }
+
+    public int generateCardMenu(Table.Builder builder) { return 0; }
 
     public void notImplemented(int input) {
         System.out.println("Option " + input + " not yet implemented!\n\n");

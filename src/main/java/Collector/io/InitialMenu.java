@@ -15,9 +15,6 @@ public class InitialMenu extends MenuHandler {
         this.commands.put(1, MenuCommand.NEW_PLAYER);
         this.commands.put(2, MenuCommand.LOAD_PLAYER);
 
-        this.commandText.put(MenuCommand.LOAD_PLAYER, "");
-        this.commandText.put(MenuCommand.NEW_PLAYER, "");
-
         this.commandDisplayText.put(MenuCommand.NEW_PLAYER, "New Player");
         this.commandDisplayText.put(MenuCommand.LOAD_PLAYER, "Load Player");
 

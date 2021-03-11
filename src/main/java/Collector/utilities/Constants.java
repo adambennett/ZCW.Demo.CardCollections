@@ -2,29 +2,15 @@ package Collector.utilities;
 
 public class Constants {
 
-    /**
-     * Shows when ATK/DEF values are unknown or hidden at draw-time
-     */
-    public static String    UnknownValue            = "??";
+    public static String UnknownValue = "??";
+    public static String DefaultPlayerName = "Adam Bennett";
+    public static Integer DefaultStartHP = 50;
+    public static Integer DefaultStartCards = 31;
+    public static Integer ViciousDamageBonus = 4;
 
-    /**
-     * The name of the player when nothing is entered
-     */
-    public static String    DefaultPlayerName       = "Adam Bennett";
-
-    /**
-     * Starting HP if none is entered
-     */
-    public static Integer   DefaultStartHP          = 50;
-
-    /**
-     * Starting # of cards in deck if none is entered
-     */
-    public static Integer   DefaultStartCards       = 31;
-
-
-    /**
-     * The extra amount of damage dealt by Vicious cards during combats where both players have chosen to Attack (Vicious Combat)
-     */
-    public static Integer ViciousDamageBonus        = 4;
+    public static String FirstEnemy  = "Chris Nobles";
+    public static String SecondEnemy = "Leon Hunter";
+    public static String ThirdEnemy  = "Dolio";
+    public static String FourthEnemy = "Kris Younger";
+    public static String FifthEnemy  = "Seto Kaiba";
 }

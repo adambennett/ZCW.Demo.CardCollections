@@ -1,3 +1,5 @@
 /target/
 /.idea/workspace.xml
 /.idea/intellij-javadocs-4.0.1.xml
+/.idea/discord.xml
+/progress.json

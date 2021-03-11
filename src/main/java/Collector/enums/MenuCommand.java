@@ -24,5 +24,6 @@ public enum MenuCommand {
     BRAWL_NIGHTMARE,
     VIEW_GAMES,
     HOST_GAME,
-    PLAY_ONLINE
+    PLAY_ONLINE,
+    CHOOSE_CARD
 }

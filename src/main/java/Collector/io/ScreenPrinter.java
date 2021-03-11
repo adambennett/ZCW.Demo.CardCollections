@@ -106,30 +106,10 @@ public class ScreenPrinter {
         return out.toString();
     }
 
-    // Initial menu
-        // Load Player
-        // New Player
-        // Quit/Exit
-
-    // Load Player menu
-        // list all players with commands -> Main Menu
-        // Go back
-
-    // New Player 'menu'
-        // what is your name?
-        // how much starting HP do you have?
-        // create player and load automatically -> Main Menu
-
     // Main menu
-        // Local Game
         // Local Brawl
         // Play Online
-        // Edit Local Deck
-        // Change Starting HP
-        // Change Name
-        // Card Library
         // Keyword Glossary
-        // Delete Account
 
         // Local Brawl Menu
             // All Spimoky
@@ -142,7 +122,7 @@ public class ScreenPrinter {
         // Online Menu
             // View Games
             // Host Game
-            // Edit Online Deck
+            // Edit Online Deck (reuse local menus just with different deck?)
             // Go back
 
             // Game Browser
@@ -156,18 +136,10 @@ public class ScreenPrinter {
                 // Starting HP
                 // Deck Size Limit
 
-        // Edit Deck -> Deck Modification Menu
-            // Add Cards
-            // Remove Cards
+
+        // Add Cards Menu
+            // List of all cards with commands
             // Go back
-
-                // Add Cards Menu
-                    // List of all cards with commands
-                    // Go back
-
-                // Remove Cards Menu
-                    // List of all cards in deck with commands
-                    // Go back
 
         // Glossary
             // List all keywords || description
