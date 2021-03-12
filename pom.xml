@@ -51,7 +51,7 @@
             <artifactId>jackson-databind</artifactId>
             <!--suppress MavenPackageUpdate -->
             <!-- This broke things when I tried to update to 2.12.x -->
-            <version>2.10.3</version>
+            <version>2.10.5.1</version>
         </dependency>
     </dependencies>
 </project>
