@@ -10,6 +10,8 @@ When one player has no HP remaining, the battle is over!
 
 ## Building
 
+- Requires Java 16+!
+
 ### Compile With `jpackage`
 
 #### Pre-reqs
